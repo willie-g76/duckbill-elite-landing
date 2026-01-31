@@ -73,11 +73,6 @@ const Header = () => {
               <Phone className="h-4 w-4" />
               (403) 200-6621
             </a>
-            <Link to="/estimate">
-              <Button variant="cta" size="lg">
-                GET AN INSTANT ESTIMATE
-              </Button>
-            </Link>
           </div>
 
           {/* Mobile Menu Button */}
