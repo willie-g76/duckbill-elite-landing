@@ -31,7 +31,7 @@ const Header = () => {
   const isActive = (path: string) => location.pathname === path;
   return <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-card/95 backdrop-blur-md shadow-soft" : "bg-transparent"}`}>
       <div className="container-max section-padding !py-0">
-        <div className="flex items-center justify-between h-20 mx-0">
+        <div className="flex items-center justify-between h-20 mx-0 gap-[0.5px]">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
             <img src={logoFull} alt="Duckbill Roofing & Waterproofing" className="h-14 w-14 object-contain" />
