@@ -90,7 +90,7 @@ const services = [
     image: heroImage,
     features: [
       "Comprehensive visual inspection",
-      "Thermal imaging analysis",
+      "AI imaging analysis",
       "Moisture detection testing",
       "Detailed photo documentation",
       "Written condition report",
@@ -126,8 +126,8 @@ const Services = () => {
               Expert Roofing Services for Calgary Homes
             </h1>
             <p className="text-muted-foreground text-lg leading-relaxed">
-              From new installations to emergency repairs, our Red Seal certified team 
-              delivers exceptional results backed by our 5-year workmanship warranty.
+              From new installations to emergency repairs, our Red Seal certified team delivers exceptional results
+              backed by our 5-year workmanship warranty.
             </p>
           </motion.div>
         </div>
@@ -145,18 +145,12 @@ const Services = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-start ${
-                  index % 2 === 1 ? "" : ""
-                }`}
+                className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-start ${index % 2 === 1 ? "" : ""}`}
               >
                 {/* Image */}
                 <div className={index % 2 === 1 ? "lg:order-2" : ""}>
                   <div className="relative rounded-2xl overflow-hidden shadow-strong aspect-[4/3]">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="w-full h-full object-cover"
-                    />
+                    <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
                   </div>
                 </div>
 
@@ -165,24 +159,15 @@ const Services = () => {
                   <span className="inline-block text-accent font-semibold text-sm tracking-wider uppercase mb-2">
                     {service.subtitle}
                   </span>
-                  <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-4">
-                    {service.title}
-                  </h2>
-                  <p className="text-muted-foreground mb-8 leading-relaxed">
-                    {service.description}
-                  </p>
+                  <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-4">{service.title}</h2>
+                  <p className="text-muted-foreground mb-8 leading-relaxed">{service.description}</p>
 
                   {/* Features */}
                   <div className="mb-8">
-                    <h3 className="font-semibold text-foreground mb-4">
-                      What's Included:
-                    </h3>
+                    <h3 className="font-semibold text-foreground mb-4">What's Included:</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {service.features.map((feature) => (
-                        <div
-                          key={feature}
-                          className="flex items-start gap-2 text-sm text-foreground"
-                        >
+                        <div key={feature} className="flex items-start gap-2 text-sm text-foreground">
                           <Check className="h-4 w-4 text-accent mt-0.5 flex-shrink-0" />
                           {feature}
                         </div>
@@ -192,15 +177,10 @@ const Services = () => {
 
                   {/* Benefits */}
                   <div className="bg-secondary rounded-xl p-6 mb-8">
-                    <h3 className="font-semibold text-foreground mb-3">
-                      Why Choose Duckbill:
-                    </h3>
+                    <h3 className="font-semibold text-foreground mb-3">Why Choose Duckbill:</h3>
                     <ul className="space-y-2">
                       {service.benefits.map((benefit) => (
-                        <li
-                          key={benefit}
-                          className="flex items-start gap-2 text-sm text-muted-foreground"
-                        >
+                        <li key={benefit} className="flex items-start gap-2 text-sm text-muted-foreground">
                           <div className="w-1.5 h-1.5 bg-accent rounded-full mt-1.5 flex-shrink-0" />
                           {benefit}
                         </li>
@@ -234,23 +214,22 @@ const Services = () => {
               Ready to Get Started?
             </h2>
             <p className="text-primary-foreground/80 text-lg max-w-2xl mx-auto mb-8">
-              Contact us today for a free, no-obligation estimate. Our team is ready 
-              to help protect your home.
+              Contact us today for a free, no-obligation estimate. Our team is ready to help protect your home.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link to="/estimate">
                 <Button variant="cta" size="xl">
-                  GET AN INSTANT ESTIMATE
+                  GET AN ESTIMATE
                 </Button>
               </Link>
-              <a href="tel:+14035551234">
+              <a href="tel:+14032006621">
                 <Button
                   variant="outline"
                   size="xl"
                   className="border-primary-foreground/30 text-primary-foreground bg-transparent hover:bg-primary-foreground/10"
                 >
                   <Phone className="h-5 w-5" />
-                  (403) 555-1234
+                  (403) 200-6621
                 </Button>
               </a>
             </div>
