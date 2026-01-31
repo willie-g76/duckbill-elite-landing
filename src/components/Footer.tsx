@@ -101,7 +101,7 @@ const Footer = () => {
                     A+
                   </div>
                   <div>
-                    <p className="text-sm font-semibold">BBB A+ Rating</p>
+                    <p className="text-sm font-semibold">BBB A Rating</p>
                     <p className="text-xs text-primary-foreground/60">Better Business Bureau</p>
                   </div>
                 </div>

@@ -6,7 +6,7 @@ const TrustSection = () => {
   const trustItems = [
     {
       icon: Shield,
-      title: "BBB A+ Rating",
+      title: "BBB A Rating",
       description: "Accredited business with excellent standing",
     },
     {
