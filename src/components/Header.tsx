@@ -124,7 +124,7 @@ const Header = () => {
                   {link.label}
                 </Link>
               ))}
-              <a href="tel:+14035551234" className="flex items-center gap-2 text-base font-medium text-foreground py-2">
+              <a href="tel:+14032006621" className="flex items-center gap-2 text-base font-medium text-foreground py-2">
                 (403) 200-6621
                 <Phone className="h-5 w-5" />
                 (403) 200-6621
