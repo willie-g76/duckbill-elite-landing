@@ -207,7 +207,7 @@ const Estimate = () => {
                       <Shield className="h-5 w-5 text-accent" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-foreground">BBB A Rated</h4>
+                      <h4 className="font-semibold text-foreground">BBB A Rating</h4>
                       <p className="text-sm text-muted-foreground">
                         Excellent standing with BBB
                       </p>

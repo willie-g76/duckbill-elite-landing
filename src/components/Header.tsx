@@ -88,8 +88,7 @@ const Header = () => {
               {navLinks.map(link => <Link key={link.href} to={link.href} onClick={() => setIsMobileMenuOpen(false)} className={`text-base font-medium py-2 transition-colors ${isActive(link.href) ? "text-accent" : "text-foreground"}`}>
                   {link.label}
                 </Link>)}
-              <a href="tel:+14035551234" className="flex items-center gap-2 text-base font-medium text-foreground py-2">
-                <Phone className="h-5 w-5" />
+              <a href="tel:+14035551234" className="flex items-center gap-2 text-base font-medium text-foreground py-2">(403) 200-6621<Phone className="h-5 w-5" />
                 (403) 555-1234
               </a>
               <Link to="/estimate" onClick={() => setIsMobileMenuOpen(false)}>
