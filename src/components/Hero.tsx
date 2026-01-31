@@ -28,7 +28,7 @@ const Hero = () => {
           >
             <div className="badge-trust">
               <Shield className="h-4 w-4 text-accent" />
-              <span>BBB A+ Rated</span>
+              <span>BBB A Rated</span>
             </div>
             <div className="badge-trust">
               <Award className="h-4 w-4 text-accent" />
