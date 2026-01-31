@@ -65,7 +65,7 @@ const Header = () => {
           </nav>
 
           {/* CTA Buttons */}
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="flex items-center gap-4">
             <a
               href="tel:+14035551234"
               className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-accent transition-colors"
