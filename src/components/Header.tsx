@@ -67,13 +67,12 @@ const Header = () => {
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center gap-4">
             <a
-              href="tel:+14032006621"
-              className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-orange-600 transition-colors"
+              href="tel:+14035551234"
+              className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-accent transition-colors"
             >
               <Phone className="h-4 w-4" />
-              <span>(403) 200-6621</span>
+              (403) 200-6621
             </a>
-
             <Link to="/estimate">
               <Button variant="cta" size="lg">
                 GET AN INSTANT ESTIMATE
