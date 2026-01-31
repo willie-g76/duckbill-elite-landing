@@ -40,9 +40,7 @@ const Estimate = () => {
         }} transition={{
           duration: 0.6
         }} className="max-w-3xl">
-            <span className="inline-block text-accent font-semibold text-sm tracking-wider uppercase mb-4">
-              Free Estimate
-            </span>
+            <span className="inline-block text-accent font-semibold text-sm tracking-wider uppercase mb-4">Fill out the form below and receive a detailed estimate within 24 hours. No obligation, no pressure—just honest pricing from Calgary's trusted roofers.</span>
             <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
               Get Your Instant Estimate
             </h1>

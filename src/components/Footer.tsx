@@ -41,7 +41,7 @@ const Footer = () => {
               Calgary's trusted roofing experts. Protecting your home from Alberta's harsh climate with quality craftsmanship and a 5-year workmanship warranty.
             </p>
             <div className="flex flex-col gap-3">
-              <a href="tel:+14035551234" className="flex items-center gap-3 text-sm text-primary-foreground/80 hover:text-accent transition-colors">403-200-6621<Phone className="h-4 w-4 text-accent" />
+              <a href="tel:+14035551234" className="flex items-center gap-3 text-sm text-primary-foreground/80 hover:text-accent transition-colors">403-200-662<Phone className="h-4 w-4 text-accent" />
                 (403) 555-1234
               </a>
               <a href="mailto:info@duckbillroofing.ca" className="flex items-center gap-3 text-sm text-primary-foreground/80 hover:text-accent transition-colors">
