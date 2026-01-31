@@ -36,10 +36,10 @@ const Header = () => {
           <Link to="/" className="flex items-center gap-3">
             <img src={logoFull} alt="Duckbill Roofing & Waterproofing" className="h-14 w-14 object-contain" />
             <div className="hidden sm:block">
-              <span className="font-heading text-lg font-bold text-foreground tracking-wide">
+              <span className="font-heading font-bold text-foreground tracking-wide mx-0 text-2xl">
                 DUCKBILL
               </span>
-              <span className="block text-xs text-muted-foreground font-medium tracking-widest">
+              <span className="block text-muted-foreground font-medium tracking-widest text-sm">
                 ROOFING + WATERPROOFING
               </span>
             </div>
