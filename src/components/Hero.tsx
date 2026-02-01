@@ -58,8 +58,8 @@ const Hero = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-lg md:text-xl text-primary-foreground/90 mb-10 max-w-2xl leading-relaxed"
           >
-            Expert roofing and waterproofing solutions backed by Red Seal certified craftsmen. 
-            From hailstorms to heavy snow, trust Duckbill to keep your home safe and dry.
+            Expert roofing and waterproofing solutions backed by Red Seal certified craftsmen. From hailstorms to heavy
+            snow, trust Duckbill to keep your home safe and dry.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -71,11 +71,15 @@ const Hero = () => {
           >
             <Link to="/estimate">
               <Button variant="cta" size="xl" className="w-full sm:w-auto">
-                GET AN INSTANT ESTIMATE
+                GET AN ESTIMATE
               </Button>
             </Link>
             <Link to="/services">
-              <Button variant="ctaOutline" size="xl" className="w-full sm:w-auto border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground">
+              <Button
+                variant="ctaOutline"
+                size="xl"
+                className="w-full sm:w-auto border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+              >
                 View Our Services
               </Button>
             </Link>
@@ -94,12 +98,8 @@ const Hero = () => {
               className="h-16 w-16 object-contain"
             />
             <div>
-              <p className="text-sm font-semibold text-primary-foreground">
-                Red Seal Certified
-              </p>
-              <p className="text-xs text-primary-foreground/70">
-                Interprovincial Standard
-              </p>
+              <p className="text-sm font-semibold text-primary-foreground">Red Seal Certified</p>
+              <p className="text-xs text-primary-foreground/70">Interprovincial Standard</p>
             </div>
           </motion.div>
         </div>
