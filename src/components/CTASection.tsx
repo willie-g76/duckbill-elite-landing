@@ -18,8 +18,8 @@ const CTASection = () => {
             Ready to Protect Your Home?
           </h2>
           <p className="text-accent-foreground/90 text-lg max-w-2xl mx-auto mb-10">
-            Get a free, no-obligation estimate in minutes. Our roofing experts are 
-            ready to help you find the perfect solution for your home.
+            Get a free, no-obligation estimate in minutes. Our roofing experts are ready to help you find the perfect
+            solution for your home.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -28,7 +28,7 @@ const CTASection = () => {
                 size="xl"
                 className="bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto group"
               >
-                GET AN INSTANT ESTIMATE
+                GET AN ESTIMATE
                 <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
@@ -44,9 +44,7 @@ const CTASection = () => {
             </a>
           </div>
 
-          <p className="mt-8 text-sm text-accent-foreground/70">
-            Available 24/7 for emergency roofing services
-          </p>
+          <p className="mt-8 text-sm text-accent-foreground/70">Available 24/7 for emergency roofing services</p>
         </motion.div>
       </div>
     </section>
