@@ -15,6 +15,7 @@ const Footer = () => {
   const quickLinks = [
     { name: "About Us", href: "/about" },
     { name: "Service Areas", href: "/service-areas" },
+    { name: "Book a Quote", href: "/booking" },
     { name: "Free Estimate", href: "/estimate" },
     { name: "Contact", href: "/contact" },
   ];
@@ -45,11 +46,11 @@ const Footer = () => {
                 (403) 200-6621
               </a>
               <a
-                href="mailto:info@duckbillroofing.ca"
+                href="mailto:info@duckbillroofing.com"
                 className="flex items-center gap-3 text-sm text-primary-foreground/80 hover:text-accent transition-colors"
               >
                 <Mail className="h-4 w-4 text-accent" />
-                info@duckbillroofing.ca
+                info@duckbillroofing.com
               </a>
               <div className="flex items-start gap-3 text-sm text-primary-foreground/80">
                 <MapPin className="h-4 w-4 text-accent mt-0.5" />

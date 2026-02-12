@@ -26,6 +26,13 @@ export default {
         charcoal: "hsl(var(--charcoal))",
         slate: "hsl(var(--slate))",
         cream: "hsl(var(--cream))",
+        duckbill: {
+          background: "#616161",
+          duck: "#3E3C39",
+          accent: "#B9B2A7",
+          textPrimary: "#313131",
+          textSecondary: "#4D4D4D",
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
