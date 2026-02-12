@@ -4,6 +4,7 @@ import TrustSection from "@/components/TrustSection";
 import ServicesOverview from "@/components/ServicesOverview";
 import ServiceAreasPreview from "@/components/ServiceAreasPreview";
 import CTASection from "@/components/CTASection";
+import FloatingCallButton from "@/components/FloatingCallButton";
 
 const Index = () => {
   return (
@@ -13,6 +14,7 @@ const Index = () => {
       <ServicesOverview />
       <ServiceAreasPreview />
       <CTASection />
+      <FloatingCallButton />
     </Layout>
   );
 };
