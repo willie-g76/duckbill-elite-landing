@@ -16,22 +16,11 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   const navLinks = [
-    {
-      href: "/",
-      label: "Home",
-    },
-    {
-      href: "/services",
-      label: "Services",
-    },
-    {
-      href: "/service-areas",
-      label: "Service Areas",
-    },
-    {
-      href: "/estimate",
-      label: "Free Estimate",
-    },
+    { href: "/", label: "Home" },
+    { href: "/services", label: "Services" },
+    { href: "/service-areas", label: "Service Areas" },
+    { href: "/booking", label: "Book a Quote" },
+    { href: "/estimate", label: "Free Estimate" },
   ];
   const isActive = (path: string) => location.pathname === path;
   return (
@@ -67,7 +56,7 @@ const Header = () => {
           {/* CTA Buttons */}
           <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-4">
             <a
-              href="tel:+14035551234"
+              href="tel:+14032006621"
               className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-accent transition-colors"
             >
               <Phone className="h-4 w-4" />
