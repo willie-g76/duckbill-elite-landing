@@ -16,8 +16,8 @@ const TrustSection = () => {
     },
     {
       icon: Users,
-      title: "1,500+ Projects",
-      description: "Trusted by Calgary homeowners since 2010",
+      title: "Combined 30 Years Experience",
+      description: "Seasoned experts protecting Calgary homes",
     },
     {
       icon: ThumbsUp,
