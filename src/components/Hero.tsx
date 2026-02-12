@@ -69,18 +69,18 @@ const Hero = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="flex flex-col sm:flex-row gap-4"
           >
-            <Link to="/estimate">
+            <Link to="/booking">
               <Button variant="cta" size="xl" className="w-full sm:w-auto">
-                GET ESTIMATE
+                BOOK A QUOTE VISIT
               </Button>
             </Link>
-            <Link to="/services">
+            <Link to="/estimate">
               <Button
                 variant="ctaOutline"
                 size="xl"
                 className="w-full sm:w-auto border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
               >
-                View Our Services
+                GET ESTIMATE
               </Button>
             </Link>
           </motion.div>

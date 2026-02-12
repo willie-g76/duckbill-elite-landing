@@ -23,6 +23,7 @@ const Header = () => {
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
     { href: "/estimate", label: "Free Estimate" },
+    { href: "/booking", label: "Book a Quote" },
   ];
   const isActive = (path: string) => location.pathname === path;
   return (

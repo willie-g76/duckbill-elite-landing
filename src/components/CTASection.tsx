@@ -23,25 +23,24 @@ const CTASection = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/estimate">
+            <Link to="/booking">
               <Button
                 size="xl"
                 className="bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto group"
               >
-                GET ESTIMATE
+                BOOK A QUOTE VISIT
                 <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <a href="tel:+14032006621">
+            <Link to="/estimate">
               <Button
                 variant="outline"
                 size="xl"
                 className="border-accent-foreground/30 text-accent-foreground bg-transparent hover:bg-accent-foreground/10 w-full sm:w-auto"
               >
-                <Phone className="h-5 w-5" />
-                (403) 200 6621
+                GET ESTIMATE
               </Button>
-            </a>
+            </Link>
           </div>
 
           <p className="mt-8 text-sm text-accent-foreground/70">Available 24/7 for emergency roofing services</p>
