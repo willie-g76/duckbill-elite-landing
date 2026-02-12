@@ -53,20 +53,13 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-4">
-            <a
-              href="tel:+14032006621"
-              className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-accent transition-colors"
-            >
-              <Phone className="h-4 w-4" />
-              (403) 200-6621
-            </a>
-            <Link to="/estimate">
+          {/* CTA Button */}
+          <div className="hidden lg:flex items-center">
+            <a href="tel:+14032006621">
               <Button variant="cta" size="lg">
-                GET AN INSTANT ESTIMATE
+                CALL NOW
               </Button>
-            </Link>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -113,16 +106,11 @@ const Header = () => {
                   {link.label}
                 </Link>
               ))}
-              <a href="tel:+14032006621" className="flex items-center gap-2 text-base font-medium text-foreground py-2">
-                (403) 200-6621
-                <Phone className="h-5 w-5" />
-                (403) 200-6621
-              </a>
-              <Link to="/estimate" onClick={() => setIsMobileMenuOpen(false)}>
+              <a href="tel:+14032006621" onClick={() => setIsMobileMenuOpen(false)}>
                 <Button variant="cta" size="lg" className="w-full mt-2">
-                  GET AN INSTANT ESTIMATE
+                  CALL NOW
                 </Button>
-              </Link>
+              </a>
             </nav>
           </motion.div>
         )}

@@ -28,7 +28,7 @@ const CTASection = () => {
                 size="xl"
                 className="bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto group"
               >
-                GET AN ESTIMATE
+                GET ESTIMATE
                 <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
