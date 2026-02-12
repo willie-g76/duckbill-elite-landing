@@ -242,7 +242,7 @@ const ServiceAreas = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/estimate">
                 <Button variant="cta" size="lg">
-                  GET AN INSTANT ESTIMATE
+                  GET ESTIMATE
                 </Button>
               </Link>
               <a href="tel:+14032006621">

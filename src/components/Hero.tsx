@@ -71,7 +71,7 @@ const Hero = () => {
           >
             <Link to="/estimate">
               <Button variant="cta" size="xl" className="w-full sm:w-auto">
-                GET AN ESTIMATE
+                GET ESTIMATE
               </Button>
             </Link>
             <Link to="/services">

@@ -141,11 +141,11 @@
   }
   
   .btn-cta {
-    @apply bg-accent text-accent-foreground font-semibold px-6 py-3 rounded-lg shadow-orange transition-all duration-300 hover:bg-accent/90 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0;
+    @apply bg-duckbill-duck text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all duration-300 hover:bg-duckbill-textPrimary hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0;
   }
   
   .btn-cta-large {
-    @apply bg-accent text-accent-foreground font-bold text-lg px-8 py-4 rounded-lg shadow-orange transition-all duration-300 hover:bg-accent/90 hover:shadow-lg hover:-translate-y-1 active:translate-y-0;
+    @apply bg-duckbill-duck text-white font-bold text-lg px-8 py-4 rounded-lg shadow-lg transition-all duration-300 hover:bg-duckbill-textPrimary hover:shadow-lg hover:-translate-y-1 active:translate-y-0;
   }
   
   .badge-trust {
