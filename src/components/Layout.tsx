@@ -13,7 +13,7 @@ const Layout = ({ children }: LayoutProps) => {
     <div className="flex min-h-screen flex-col">
       <DynamicHeader />
       <Header />
-      <main className="flex-1 pt-14 sm:pt-16">{children}</main>
+      <main className="flex-1 pt-[136px] sm:pt-[144px]">{children}</main>
       <DynamicFooter />
       <FloatingCallButton />
     </div>
