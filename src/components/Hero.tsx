@@ -1,14 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Shield, CloudLightning, Clock, Wind, CloudRain, CloudSnow, Thermometer, X } from "lucide-react";
+import { Shield, CloudLightning, Wind, CloudRain, CloudSnow, Thermometer, Search, Sparkles } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import heroImage from "@/assets/hero-roofing.jpg";
 import redSealBadge from "@/assets/red-seal-badge.png";
 import { supabase } from "@/integrations/supabase/client";
-import { getHailHistory, defaultHailInfo } from "@/data/hailHistory";
+import hailHistory, { getHailHistory, defaultHailInfo, type HailEvent } from "@/data/hailHistory";
 
 interface WeatherData {
   temp: number;
@@ -24,7 +25,26 @@ const Hero = () => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [showWeather, setShowWeather] = useState(false);
   const [showHail, setShowHail] = useState(false);
+  const [hailSearch, setHailSearch] = useState("");
   const location = useLocation();
+
+  // Get unique hail events for the searchable list
+  const allHailEvents = useMemo(() => {
+    const seen = new Set<string>();
+    return Object.values(hailHistory).filter((event) => {
+      if (seen.has(event.community)) return false;
+      seen.add(event.community);
+      return true;
+    }).sort((a, b) => a.community.localeCompare(b.community));
+  }, []);
+
+  const filteredHailEvents = useMemo(() => {
+    if (!hailSearch.trim()) return allHailEvents;
+    const q = hailSearch.toLowerCase();
+    return allHailEvents.filter(
+      (e) => e.community.toLowerCase().includes(q) || e.date.toLowerCase().includes(q)
+    );
+  }, [hailSearch, allHailEvents]);
 
   const getCommunitySlug = () => {
     const match = location.pathname.match(/\/service-areas\/([^/]+)/);
@@ -74,36 +94,26 @@ const Hero = () => {
               onClick={() => setShowWeather(true)}
               className="badge-trust cursor-pointer hover:bg-primary-foreground/20 transition-colors"
             >
-              {weather ? (
-                <>
-                  <img
-                    src={`https://openweathermap.org/img/wn/${weather.icon}.png`}
-                    alt={weather.description}
-                    className="h-5 w-5"
-                  />
-                  <span>{weather.temp}°C — {weather.description}</span>
-                </>
-              ) : (
-                <>
-                  <Thermometer className="h-4 w-4 text-accent" />
-                  <span>Live Weather</span>
-                </>
-              )}
+              <Thermometer className="h-4 w-4 text-accent" />
+              <span>Current Weather</span>
             </button>
 
             {/* Hail History Badge - Clickable */}
             <button
-              onClick={() => setShowHail(true)}
+              onClick={() => { setShowHail(true); setHailSearch(""); }}
               className="badge-trust cursor-pointer hover:bg-primary-foreground/20 transition-colors"
             >
               <CloudLightning className="h-4 w-4 text-accent" />
-              <span>Hail History: {hailData?.maxHailSize || "View"}</span>
+              <span>Hail History</span>
             </button>
 
-            <div className="badge-trust">
-              <Clock className="h-4 w-4 text-accent" />
-              <span>24/7 Emergency Service</span>
-            </div>
+            {/* Placeholder Badge */}
+            <button
+              className="badge-trust cursor-pointer hover:bg-primary-foreground/20 transition-colors"
+            >
+              <Sparkles className="h-4 w-4 text-accent" />
+              <span>Coming Soon</span>
+            </button>
           </motion.div>
 
           {/* Main Heading */}
@@ -137,7 +147,7 @@ const Hero = () => {
           >
             <Link to="/booking">
               <Button variant="cta" size="xl" className="w-full sm:w-auto">
-                BOOK A QUOTE VISIT
+                SCHEDULE A QUOTE
               </Button>
             </Link>
             <Link to="/estimate">
@@ -247,40 +257,44 @@ const Hero = () => {
 
       {/* Hail History Dialog */}
       <Dialog open={showHail} onOpenChange={setShowHail}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-lg max-h-[80vh] flex flex-col">
           <DialogHeader>
             <DialogTitle className="font-heading flex items-center gap-2">
               <CloudLightning className="h-5 w-5 text-accent" />
-              {hailData?.community || "Calgary"} Hail History
+              Calgary Hail History
             </DialogTitle>
-            <DialogDescription>Historical severe hail events</DialogDescription>
+            <DialogDescription>Search historical hail events by community or year</DialogDescription>
           </DialogHeader>
-          {hailData && (
-            <div className="space-y-4 pt-2">
-              <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
-                <p className="text-sm font-semibold text-destructive">Largest Recorded Hail</p>
-                <p className="text-2xl font-bold font-heading mt-1">{hailData.maxHailSize}</p>
-                <p className="text-sm text-muted-foreground mt-1">{hailData.date}</p>
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">{hailData.description}</p>
-              <div className="bg-muted rounded-lg p-4">
-                <p className="text-xs text-muted-foreground mb-2">Why this matters for your roof</p>
-                <p className="text-sm">
-                  Hailstones of this size can crack shingles, dent flashing, and compromise your roof's waterproofing.
-                  If your home was in the area during this event, a professional inspection is recommended.
-                </p>
-              </div>
-              <Link
-                to="/booking"
-                onClick={() => setShowHail(false)}
-                className="block"
-              >
-                <Button variant="cta" className="w-full">
-                  Book a Free Hail Damage Inspection
-                </Button>
-              </Link>
-            </div>
-          )}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search community or year..."
+              value={hailSearch}
+              onChange={(e) => setHailSearch(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+          <div className="overflow-y-auto flex-1 space-y-2 pr-1 -mr-1">
+            {filteredHailEvents.length === 0 ? (
+              <p className="text-sm text-muted-foreground py-4 text-center">No matching events found.</p>
+            ) : (
+              filteredHailEvents.map((event) => (
+                <div key={event.community} className="bg-muted rounded-lg p-3 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <p className="font-semibold text-sm">{event.community}</p>
+                    <span className="text-xs text-muted-foreground">{event.date}</span>
+                  </div>
+                  <p className="text-xs font-medium text-destructive">Max: {event.maxHailSize}</p>
+                  <p className="text-xs text-muted-foreground">{event.description}</p>
+                </div>
+              ))
+            )}
+          </div>
+          <Link to="/booking" onClick={() => setShowHail(false)} className="block mt-2">
+            <Button variant="cta" className="w-full">
+              Book a Free Hail Damage Inspection
+            </Button>
+          </Link>
         </DialogContent>
       </Dialog>
     </section>
