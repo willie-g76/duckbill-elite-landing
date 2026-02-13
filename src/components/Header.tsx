@@ -28,7 +28,7 @@ const Header = () => {
   const isActive = (path: string) => location.pathname === path;
   return (
     <header
-      className={`fixed top-[56px] sm:top-[64px] left-0 right-0 z-40 transition-all duration-300 ${isScrolled ? "bg-card/95 backdrop-blur-md shadow-soft" : "bg-transparent"}`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-card/95 backdrop-blur-md shadow-soft" : "bg-card/90 backdrop-blur-sm"}`}
     >
       <div className="container-max section-padding !py-0">
         <div className="flex items-center justify-between h-20 mx-0 gap-[0.5px]">

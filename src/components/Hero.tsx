@@ -1,13 +1,56 @@
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Shield, Award, Clock } from "lucide-react";
+import { Shield, CloudLightning, Clock, Wind, CloudRain, CloudSnow, Thermometer, X } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import heroImage from "@/assets/hero-roofing.jpg";
 import redSealBadge from "@/assets/red-seal-badge.png";
+import { supabase } from "@/integrations/supabase/client";
+import { getHailHistory, defaultHailInfo } from "@/data/hailHistory";
+
+interface WeatherData {
+  temp: number;
+  feels_like: number;
+  description: string;
+  icon: string;
+  wind_speed: number;
+  rain: number;
+  snow: number;
+}
 
 const Hero = () => {
+  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [showWeather, setShowWeather] = useState(false);
+  const [showHail, setShowHail] = useState(false);
+  const location = useLocation();
+
+  const getCommunitySlug = () => {
+    const match = location.pathname.match(/\/service-areas\/([^/]+)/);
+    return match ? match[1] : null;
+  };
+
+  const communitySlug = getCommunitySlug();
+  const hailData = communitySlug ? getHailHistory(communitySlug) : defaultHailInfo;
+
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke("get-weather");
+        if (error) throw error;
+        setWeather(data);
+      } catch (e) {
+        console.error("Failed to fetch weather:", e);
+      }
+    };
+    fetchWeather();
+    const interval = setInterval(fetchWeather, 15 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <section className="relative min-h-screen flex items-center -mt-[136px] sm:-mt-[144px] pt-[136px] sm:pt-[144px]">
+    <section className="relative min-h-screen flex items-center -mt-20 pt-20">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -26,14 +69,37 @@ const Hero = () => {
             transition={{ duration: 0.6 }}
             className="flex flex-wrap gap-3 mb-8"
           >
-            <div className="badge-trust">
-              <Shield className="h-4 w-4 text-accent" />
-              <span>BBB A Rated</span>
-            </div>
-            <div className="badge-trust">
-              <Award className="h-4 w-4 text-accent" />
-              <span>5-Year Warranty</span>
-            </div>
+            {/* Weather Badge - Clickable */}
+            <button
+              onClick={() => setShowWeather(true)}
+              className="badge-trust cursor-pointer hover:bg-primary-foreground/20 transition-colors"
+            >
+              {weather ? (
+                <>
+                  <img
+                    src={`https://openweathermap.org/img/wn/${weather.icon}.png`}
+                    alt={weather.description}
+                    className="h-5 w-5"
+                  />
+                  <span>{weather.temp}°C — {weather.description}</span>
+                </>
+              ) : (
+                <>
+                  <Thermometer className="h-4 w-4 text-accent" />
+                  <span>Live Weather</span>
+                </>
+              )}
+            </button>
+
+            {/* Hail History Badge - Clickable */}
+            <button
+              onClick={() => setShowHail(true)}
+              className="badge-trust cursor-pointer hover:bg-primary-foreground/20 transition-colors"
+            >
+              <CloudLightning className="h-4 w-4 text-accent" />
+              <span>Hail History: {hailData?.maxHailSize || "View"}</span>
+            </button>
+
             <div className="badge-trust">
               <Clock className="h-4 w-4 text-accent" />
               <span>24/7 Emergency Service</span>
@@ -120,6 +186,103 @@ const Hero = () => {
           />
         </div>
       </motion.div>
+
+      {/* Weather Dialog */}
+      <Dialog open={showWeather} onOpenChange={setShowWeather}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-heading flex items-center gap-2">
+              <Thermometer className="h-5 w-5 text-accent" />
+              Calgary Live Weather
+            </DialogTitle>
+            <DialogDescription>Current conditions in Calgary, AB</DialogDescription>
+          </DialogHeader>
+          {weather ? (
+            <div className="space-y-4 pt-2">
+              <div className="flex items-center gap-4">
+                <img
+                  src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
+                  alt={weather.description}
+                  className="h-16 w-16"
+                />
+                <div>
+                  <p className="text-3xl font-bold font-heading">{weather.temp}°C</p>
+                  <p className="text-muted-foreground capitalize">{weather.description}</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-muted rounded-lg p-3">
+                  <p className="text-xs text-muted-foreground">Feels Like</p>
+                  <p className="font-semibold">{weather.feels_like}°C</p>
+                </div>
+                <div className="bg-muted rounded-lg p-3">
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <Wind className="h-3 w-3" /> Wind
+                  </div>
+                  <p className="font-semibold">{weather.wind_speed} km/h</p>
+                </div>
+                {weather.rain > 0 && (
+                  <div className="bg-muted rounded-lg p-3">
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                      <CloudRain className="h-3 w-3" /> Rain
+                    </div>
+                    <p className="font-semibold">{weather.rain} mm</p>
+                  </div>
+                )}
+                {weather.snow > 0 && (
+                  <div className="bg-muted rounded-lg p-3">
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                      <CloudSnow className="h-3 w-3" /> Snow
+                    </div>
+                    <p className="font-semibold">{weather.snow} mm</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <p className="text-muted-foreground py-4">Loading weather data...</p>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Hail History Dialog */}
+      <Dialog open={showHail} onOpenChange={setShowHail}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-heading flex items-center gap-2">
+              <CloudLightning className="h-5 w-5 text-accent" />
+              {hailData?.community || "Calgary"} Hail History
+            </DialogTitle>
+            <DialogDescription>Historical severe hail events</DialogDescription>
+          </DialogHeader>
+          {hailData && (
+            <div className="space-y-4 pt-2">
+              <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
+                <p className="text-sm font-semibold text-destructive">Largest Recorded Hail</p>
+                <p className="text-2xl font-bold font-heading mt-1">{hailData.maxHailSize}</p>
+                <p className="text-sm text-muted-foreground mt-1">{hailData.date}</p>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">{hailData.description}</p>
+              <div className="bg-muted rounded-lg p-4">
+                <p className="text-xs text-muted-foreground mb-2">Why this matters for your roof</p>
+                <p className="text-sm">
+                  Hailstones of this size can crack shingles, dent flashing, and compromise your roof's waterproofing.
+                  If your home was in the area during this event, a professional inspection is recommended.
+                </p>
+              </div>
+              <Link
+                to="/booking"
+                onClick={() => setShowHail(false)}
+                className="block"
+              >
+                <Button variant="cta" className="w-full">
+                  Book a Free Hail Damage Inspection
+                </Button>
+              </Link>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
