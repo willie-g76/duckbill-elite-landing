@@ -180,12 +180,12 @@ const DynamicHeader = () => {
             )}
           </div>
 
-          {/* Phone - Desktop only, mobile uses floating CTA */}
+          {/* Call Now Button */}
           <a
             href="tel:+14032006621"
-            className="hidden sm:flex items-center gap-2 text-primary-foreground font-bold text-base sm:text-lg hover:text-accent transition-colors shrink-0"
+            className="flex items-center gap-2 bg-accent text-accent-foreground font-heading font-bold text-sm px-4 py-2 rounded-md hover:bg-accent/90 transition-all shrink-0"
           >
-            <span>(403) 200-6621</span>
+            CALL NOW
           </a>
         </div>
 

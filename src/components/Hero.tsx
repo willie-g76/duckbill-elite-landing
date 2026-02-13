@@ -7,7 +7,7 @@ import redSealBadge from "@/assets/red-seal-badge.png";
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center pt-32">
+    <section className="relative min-h-screen flex items-center -mt-[136px] sm:-mt-[144px] pt-[136px] sm:pt-[144px]">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
