@@ -12,6 +12,16 @@ import logoFull from "@/assets/logo-full.png";
 
 type QuoteType = "in-person" | "virtual" | null;
 
+const timeSlots = [
+  { value: "8:00", label: "8:00 AM – 9:30 AM" },
+  { value: "9:30", label: "9:30 AM – 11:00 AM" },
+  { value: "11:00", label: "11:00 AM – 12:30 PM" },
+  { value: "12:30", label: "12:30 PM – 2:00 PM" },
+  { value: "2:00", label: "2:00 PM – 3:30 PM" },
+  { value: "3:30", label: "3:30 PM – 5:00 PM" },
+  { value: "4:30", label: "4:30 PM – 6:00 PM" },
+];
+
 const QRLanding = () => {
   const { slug } = useParams<{ slug: string }>();
   const neighbourhood = slug ? getNeighbourhoodBySlug(slug) : undefined;
@@ -21,6 +31,7 @@ const QRLanding = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedName, setSubmittedName] = useState("");
   const [date, setDate] = useState<Date>();
+  const [timeSlot, setTimeSlot] = useState("");
 
   if (!neighbourhood) {
     return (
@@ -270,22 +281,46 @@ const QRLanding = () => {
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
-                      className="space-y-1.5 overflow-hidden"
+                      className="space-y-4 overflow-hidden"
                     >
-                      <Label>Preferred Date</Label>
-                      <div className="border rounded-lg overflow-hidden">
-                        <Calendar
-                          mode="single"
-                          selected={date}
-                          onSelect={setDate}
-                          disabled={(d) => d < new Date() || d.getDay() === 0}
-                          className="mx-auto"
-                        />
+                      <div className="space-y-1.5">
+                        <Label>Preferred Date</Label>
+                        <div className="border rounded-lg overflow-hidden">
+                          <Calendar
+                            mode="single"
+                            selected={date}
+                            onSelect={(d) => { setDate(d); setTimeSlot(""); }}
+                            disabled={(d) => d < new Date() || d.getDay() === 0}
+                            className="mx-auto"
+                          />
+                        </div>
                       </div>
+
                       {date && (
-                        <p className="text-sm text-muted-foreground">
-                          Selected: {format(date, "MMMM d, yyyy")}
-                        </p>
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.25 }}
+                          className="space-y-1.5"
+                        >
+                          <Label>Preferred Time — {format(date, "MMM d")}</Label>
+                          <div className="grid grid-cols-2 gap-2">
+                            {timeSlots.map((slot) => (
+                              <button
+                                key={slot.value}
+                                type="button"
+                                onClick={() => setTimeSlot(slot.value)}
+                                className={`rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors ${
+                                  timeSlot === slot.value
+                                    ? "border-duckbill-duck bg-duckbill-duck text-white"
+                                    : "border-input bg-background text-foreground hover:bg-secondary"
+                                }`}
+                              >
+                                {slot.label}
+                              </button>
+                            ))}
+                          </div>
+                        </motion.div>
                       )}
                     </motion.div>
                   )}
