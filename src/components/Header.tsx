@@ -1,9 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { Menu, X, Phone, Wind } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { Menu, X, Wind } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { supabase } from "@/integrations/supabase/client";
+import { getNeighbourhoodBySlug } from "@/data/neighbourhoods";
 import logoFull from "@/assets/logo-full.png";
 
 interface WeatherData {
@@ -19,6 +19,14 @@ const Header = () => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const location = useLocation();
 
+  const community = useMemo(() => {
+    const parts = location.pathname.split("/").filter(Boolean);
+    if (parts[0] === "service-areas" && parts[1]) {
+      return getNeighbourhoodBySlug(parts[1]) || null;
+    }
+    return null;
+  }, [location.pathname]);
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -30,9 +38,17 @@ const Header = () => {
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        const { data, error } = await supabase.functions.invoke("get-weather");
-        if (error) throw error;
-        setWeather(data);
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+        const qs = community
+          ? `?lat=${community.lat}&lon=${community.lng}`
+          : "";
+        const res = await fetch(
+          `${supabaseUrl}/functions/v1/get-weather${qs}`,
+          { headers: { Authorization: `Bearer ${anonKey}`, apikey: anonKey } }
+        );
+        if (!res.ok) throw new Error(`Weather fetch failed: ${res.status}`);
+        setWeather(await res.json());
       } catch (e) {
         console.error("Failed to fetch weather:", e);
       }
@@ -40,7 +56,7 @@ const Header = () => {
     fetchWeather();
     const interval = setInterval(fetchWeather, 15 * 60 * 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [community]);
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/services", label: "Services" },
@@ -56,12 +72,12 @@ const Header = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-card/95 backdrop-blur-md shadow-soft" : "bg-card/90 backdrop-blur-sm"}`}
     >
-      <div className="flex items-center h-20 px-3 sm:px-4">
-          {/* Weather Widget — far left */}
+      <div className="flex items-center h-20">
+          {/* Weather Widget — far left, flush to edge */}
           {weather && (
             <Link
               to="/faq"
-              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/80 hover:bg-secondary hover:shadow-md transition-all cursor-pointer group shrink-0"
+              className="hidden sm:flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-r-full bg-secondary/80 hover:bg-secondary hover:shadow-md transition-all cursor-pointer group shrink-0"
             >
               <img
                 src={`https://openweathermap.org/img/wn/${weather.icon}.png`}
@@ -70,7 +86,9 @@ const Header = () => {
               />
               <div className="flex flex-col leading-none">
                 <span className="text-sm font-bold text-foreground">{weather.temp}°C</span>
-                <span className="text-[10px] text-muted-foreground capitalize">{weather.description}</span>
+                <span className="text-[10px] text-muted-foreground capitalize">
+                  {community ? community.name : weather.description}
+                </span>
               </div>
               <div className="hidden md:flex items-center gap-1 text-xs text-muted-foreground pl-1 border-l border-border ml-1">
                 <Wind className="h-3 w-3" />
@@ -79,7 +97,7 @@ const Header = () => {
             </Link>
           )}
 
-        <div className="flex-1 flex items-center justify-between container-max section-padding !py-0">
+        <div className="flex-1 flex items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
             <img src={logoFull} alt="Duckbill Roofing & Waterproofing" className="h-14 w-14 object-contain" />

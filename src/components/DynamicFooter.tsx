@@ -3,17 +3,9 @@ import { Phone, Mail, MapPin } from "lucide-react";
 import { useMemo } from "react";
 import logoFull from "@/assets/logo-full.png";
 import SocialLinks from "@/components/SocialLinks";
+import neighbourhoods from "@/data/neighbourhoods";
 
-const communities = [
-  { name: "Beltline", slug: "beltline" },
-  { name: "Varsity", slug: "varsity" },
-  { name: "McKenzie Towne", slug: "mckenzie-towne" },
-  { name: "Kensington", slug: "kensington" },
-  { name: "Bridgeland", slug: "bridgeland" },
-  { name: "Bowness", slug: "bowness" },
-  { name: "Inglewood", slug: "inglewood" },
-  { name: "Signal Hill", slug: "signal-hill" },
-];
+const communities = neighbourhoods.map((n) => ({ name: n.name, slug: n.slug }));
 
 const DynamicFooter = () => {
   const location = useLocation();

@@ -4,6 +4,8 @@ export interface NeighbourhoodData {
   description: string;
   highlights: string[];
   quadrant: string;
+  lat: number;
+  lng: number;
 }
 
 const neighbourhoods: NeighbourhoodData[] = [
@@ -19,6 +21,8 @@ const neighbourhoods: NeighbourhoodData[] = [
       "Free on-site estimates for North Haven homeowners",
     ],
     quadrant: "N",
+    lat: 51.1085,
+    lng: -114.1004,
   },
   {
     name: "Thorncliffe",
@@ -32,6 +36,8 @@ const neighbourhoods: NeighbourhoodData[] = [
       "Red Seal certified crew with 5-year workmanship warranty",
     ],
     quadrant: "NE",
+    lat: 51.1000,
+    lng: -114.0780,
   },
   {
     name: "MacEwan Glen",
@@ -45,6 +51,8 @@ const neighbourhoods: NeighbourhoodData[] = [
       "Trusted by NE Calgary homeowners — BBB A rated",
     ],
     quadrant: "NE",
+    lat: 51.1195,
+    lng: -114.0415,
   },
   {
     name: "McKenzie Towne",
@@ -58,6 +66,8 @@ const neighbourhoods: NeighbourhoodData[] = [
       "Fast, reliable service with a 5-year workmanship guarantee",
     ],
     quadrant: "SE",
+    lat: 50.9125,
+    lng: -113.9575,
   },
   {
     name: "Cranston",
@@ -71,6 +81,8 @@ const neighbourhoods: NeighbourhoodData[] = [
       "24/7 emergency storm response in SE Calgary",
     ],
     quadrant: "SE",
+    lat: 50.9000,
+    lng: -114.0125,
   },
   {
     name: "Auburn Bay",
@@ -84,6 +96,8 @@ const neighbourhoods: NeighbourhoodData[] = [
       "Serving Auburn Bay, Mahogany, and surrounding SE communities",
     ],
     quadrant: "SE",
+    lat: 50.8925,
+    lng: -113.9850,
   },
   {
     name: "Tuscany",
@@ -97,6 +111,8 @@ const neighbourhoods: NeighbourhoodData[] = [
       "Comprehensive roof inspections with honest, no-pressure quotes",
     ],
     quadrant: "NW",
+    lat: 51.1280,
+    lng: -114.2400,
   },
   {
     name: "Royal Oak",
@@ -110,6 +126,8 @@ const neighbourhoods: NeighbourhoodData[] = [
       "Premium materials backed by a 5-year workmanship warranty",
     ],
     quadrant: "NW",
+    lat: 51.1320,
+    lng: -114.2250,
   },
   {
     name: "Copperfield",
@@ -123,6 +141,8 @@ const neighbourhoods: NeighbourhoodData[] = [
       "Serving Copperfield, New Brighton, and McKenzie Towne",
     ],
     quadrant: "SE",
+    lat: 50.9005,
+    lng: -113.9470,
   },
   {
     name: "New Brighton",
@@ -136,6 +156,8 @@ const neighbourhoods: NeighbourhoodData[] = [
       "Free no-obligation inspections for New Brighton homeowners",
     ],
     quadrant: "SE",
+    lat: 50.8950,
+    lng: -113.9625,
   },
 ];
 

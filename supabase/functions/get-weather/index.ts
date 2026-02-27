@@ -16,7 +16,15 @@ serve(async (req) => {
       throw new Error("OPENWEATHER_API_Key is not configured");
     }
 
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=Calgary,CA&units=metric&appid=${apiKey}`;
+    const reqUrl = new URL(req.url);
+    const lat = reqUrl.searchParams.get("lat");
+    const lon = reqUrl.searchParams.get("lon");
+
+    const locationQuery = lat && lon
+      ? `lat=${lat}&lon=${lon}`
+      : "q=Calgary,CA";
+
+    const url = `https://api.openweathermap.org/data/2.5/weather?${locationQuery}&units=metric&appid=${apiKey}`;
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`OpenWeatherMap API error [${response.status}]: ${await response.text()}`);
