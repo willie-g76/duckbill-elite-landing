@@ -238,7 +238,7 @@ const ServiceAreaLanding = () => {
             "@context": "https://schema.org",
             "@type": "RoofingContractor",
             name: `Duckbill Roofing - ${area.name}`,
-            url: `https://duckbill-elite-landing.lovable.app/service-areas/${area.slug}`,
+            url: `https://duckbillroofing.ca/service-areas/${area.slug}`,
             telephone: "+14032006621",
             email: "info@duckbillroofing.com",
             areaServed: { "@type": "City", name: area.name },

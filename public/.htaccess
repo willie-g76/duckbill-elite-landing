@@ -1,0 +1,18 @@
+RewriteEngine On
+
+# Redirect HTTP to HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Redirect .com to .ca
+RewriteCond %{HTTP_HOST} ^(www\.)?duckbillroofing\.com$ [NC]
+RewriteRule ^ https://duckbillroofing.ca%{REQUEST_URI} [L,R=301]
+
+# Redirect www to non-www
+RewriteCond %{HTTP_HOST} ^www\.duckbillroofing\.ca$ [NC]
+RewriteRule ^ https://duckbillroofing.ca%{REQUEST_URI} [L,R=301]
+
+# SPA client-side routing — serve index.html for all non-file requests
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
