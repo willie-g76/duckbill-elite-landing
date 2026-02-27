@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Phone, ArrowRight, Shield, Award, Clock, CheckCircle } from "lucide-react";
 import ContactOptions from "@/components/ContactOptions";
 import calgaryHomes from "@/assets/calgary-homes.jpg";
+import neighbourhoods from "@/data/neighbourhoods";
 
 interface AreaData {
   name: string;
@@ -76,9 +77,15 @@ const areaData: Record<string, AreaData> = {
   },
 };
 
+// Build merged lookup: city data + neighbourhood data
+const allAreaData: Record<string, AreaData> = { ...areaData };
+for (const n of neighbourhoods) {
+  allAreaData[n.slug] = n;
+}
+
 const ServiceAreaLanding = () => {
   const { areaSlug } = useParams<{ areaSlug: string }>();
-  const area = areaData[areaSlug || ""];
+  const area = allAreaData[areaSlug || ""];
 
   if (!area) {
     return (

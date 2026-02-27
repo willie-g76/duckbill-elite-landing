@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { MapPin, Phone, ArrowRight } from "lucide-react";
 import calgaryHomes from "@/assets/calgary-homes.jpg";
+import neighbourhoods from "@/data/neighbourhoods";
 
 const serviceAreas = [
   { name: "Calgary", slug: "calgary", desc: "All neighbourhoods across the city" },
@@ -60,7 +61,7 @@ const ServiceAreas = () => {
         <div className="container-max">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Communities We Serve
+              Cities & Towns
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Click on any area to learn more about our services in your community.
@@ -87,6 +88,47 @@ const ServiceAreas = () => {
                         {area.name}
                       </h3>
                       <p className="text-sm text-muted-foreground">{area.desc}</p>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Calgary Neighbourhoods */}
+      <section className="section-padding bg-secondary">
+        <div className="container-max">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Calgary Neighbourhoods
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Hyper-local roofing expertise for Calgary communities — hail damage repair, roof replacement, and more.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {neighbourhoods.map((area, index) => (
+              <motion.div
+                key={area.slug}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05 }}
+              >
+                <Link
+                  to={`/service-areas/${area.slug}`}
+                  className="block bg-card rounded-xl p-6 shadow-soft border border-border hover:border-accent/50 hover:shadow-strong transition-all group"
+                >
+                  <div className="flex items-start gap-3">
+                    <MapPin className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h3 className="font-heading text-lg font-bold text-foreground group-hover:text-accent transition-colors">
+                        {area.name}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">{area.quadrant} Calgary</p>
                     </div>
                   </div>
                 </Link>

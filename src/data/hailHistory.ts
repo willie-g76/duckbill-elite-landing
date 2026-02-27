@@ -220,7 +220,26 @@ const hailHistory: Record<string, HailEvent> = {
     date: "August 7, 2014",
     description: "Northern Calgary community hit by the 2014 storm.",
   },
+  // === N Calgary ===
+  "north-haven": {
+    community: "North Haven",
+    maxHailSize: "Walnut (3.8 cm)",
+    date: "August 4, 2012",
+    description: "North Calgary community affected by the widespread 2012 hailstorm.",
+  },
   // === NE Calgary ===
+  "thorncliffe": {
+    community: "Thorncliffe",
+    maxHailSize: "Walnut (3.8 cm)",
+    date: "August 4, 2012",
+    description: "NE Calgary community impacted by the 2012 city-wide hailstorm.",
+  },
+  "macewan-glen": {
+    community: "MacEwan Glen",
+    maxHailSize: "Loonie (2.6 cm)",
+    date: "July 30, 2016",
+    description: "NE Calgary community affected by the 2016 summer hail event.",
+  },
   "martindale": {
     community: "Martindale",
     maxHailSize: "Tennis ball (6.4 cm)",
