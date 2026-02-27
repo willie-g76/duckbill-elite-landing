@@ -222,14 +222,14 @@ const Services = () => {
                   GET AN ESTIMATE
                 </Button>
               </Link>
-              <a href="tel:+14032006621">
+              <a href="tel:+15874323639">
                 <Button
                   variant="outline"
                   size="xl"
                   className="border-primary-foreground/30 text-primary-foreground bg-transparent hover:bg-primary-foreground/10"
                 >
                   <Phone className="h-5 w-5" />
-                  (403) 200-6621
+                  (587) 432-3639
                 </Button>
               </a>
             </div>

@@ -4,20 +4,20 @@ import { Button } from "@/components/ui/button";
 const ContactOptions = () => {
   return (
     <div className="flex flex-wrap gap-3">
-      <a href="tel:+14032006621">
+      <a href="tel:+15874323639">
         <Button variant="cta" size="lg" className="gap-2">
           <Phone className="h-4 w-4" />
           Call Now
         </Button>
       </a>
-      <a href="sms:+14032006621" target="_blank" rel="noopener noreferrer">
+      <a href="sms:+15874323639" target="_blank" rel="noopener noreferrer">
         <Button variant="outline" size="lg" className="gap-2">
           <MessageCircle className="h-4 w-4" />
           Text Us
         </Button>
       </a>
       <a
-        href="https://wa.me/14032006621?text=Hi%2C%20I%27d%20like%20a%20roofing%20quote"
+        href="https://wa.me/15874323639?text=Hi%2C%20I%27d%20like%20a%20roofing%20quote"
         target="_blank"
         rel="noopener noreferrer"
       >

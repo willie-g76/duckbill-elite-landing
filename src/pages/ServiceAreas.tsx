@@ -45,10 +45,10 @@ const ServiceAreas = () => {
               <Link to="/estimate">
                 <Button variant="cta" size="lg">GET ESTIMATE</Button>
               </Link>
-              <a href="tel:+14032006621">
+              <a href="tel:+15874323639">
                 <Button variant="outline" size="lg" className="border-primary-foreground/30 text-primary-foreground bg-transparent hover:bg-primary-foreground/10">
                   <Phone className="h-4 w-4" />
-                  (403) 200-6621
+                  (587) 432-3639
                 </Button>
               </a>
             </div>

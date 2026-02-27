@@ -41,21 +41,21 @@ const Footer = () => {
             </p>
             <div className="flex flex-col gap-3 mb-6">
               <a
-                href="tel:+14032006621"
+                href="tel:+15874323639"
                 className="flex items-center gap-3 text-sm text-primary-foreground/80 hover:text-accent transition-colors"
               >
                 <Phone className="h-4 w-4 text-accent" />
-                (403) 200-6621
+                (587) 432-3639
               </a>
               <a
-                href="sms:+14032006621"
+                href="sms:+15874323639"
                 className="flex items-center gap-3 text-sm text-primary-foreground/80 hover:text-accent transition-colors"
               >
                 <MessageCircle className="h-4 w-4 text-accent" />
                 Text Us
               </a>
               <a
-                href="https://wa.me/14032006621?text=Hi%2C%20I%27d%20like%20a%20roofing%20quote"
+                href="https://wa.me/15874323639?text=Hi%2C%20I%27d%20like%20a%20roofing%20quote"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 text-sm text-primary-foreground/80 hover:text-accent transition-colors"

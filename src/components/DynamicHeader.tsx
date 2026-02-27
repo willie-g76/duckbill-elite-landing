@@ -182,7 +182,7 @@ const DynamicHeader = () => {
 
           {/* Call Now Button */}
           <a
-            href="tel:+14032006621"
+            href="tel:+15874323639"
             className="flex items-center gap-2 bg-accent text-accent-foreground font-heading font-bold text-sm px-4 py-2 rounded-md hover:bg-accent/90 transition-all shrink-0"
           >
             CALL NOW

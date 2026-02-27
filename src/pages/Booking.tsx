@@ -67,7 +67,7 @@ const Booking = () => {
               Schedule a Visit
             </span>
             <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
-              Book a Quote Visit
+              Schedule a Quote
             </h1>
             <p className="text-muted-foreground text-lg leading-relaxed">
               Pick a date and time that works for you. One of our roofing experts will visit your property for a free,
@@ -227,9 +227,9 @@ const Booking = () => {
               <div className="bg-primary rounded-2xl p-8 text-primary-foreground">
                 <h3 className="font-heading text-xl font-bold mb-6">Prefer to Talk?</h3>
                 <div className="space-y-4">
-                  <a href="tel:+14032006621" className="flex items-center gap-3 hover:text-accent transition-colors">
+                  <a href="tel:+15874323639" className="flex items-center gap-3 hover:text-accent transition-colors">
                     <Phone className="h-5 w-5 text-accent" />
-                    <span>(403) 200-6621</span>
+                    <span>(587) 432-3639</span>
                   </a>
                   <a
                     href="mailto:info@duckbillroofing.com"

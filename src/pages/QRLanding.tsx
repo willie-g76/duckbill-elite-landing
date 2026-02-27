@@ -159,7 +159,7 @@ const QRLanding = () => {
 
               {/* Call Now */}
               <Button variant="cta" size="xl" className="w-full mt-auto text-base" asChild>
-                <a href="tel:+14032006621">
+                <a href="tel:+15874323639">
                   <Phone className="h-5 w-5 mr-2" />
                   Call Now
                 </a>
@@ -197,7 +197,7 @@ const QRLanding = () => {
 
               {/* Call Now */}
               <Button variant="cta" size="xl" className="w-full mt-auto text-base" asChild>
-                <a href="tel:+14032006621">
+                <a href="tel:+15874323639">
                   <Phone className="h-5 w-5 mr-2" />
                   Call Now
                 </a>
@@ -337,7 +337,7 @@ const QRLanding = () => {
 
               {/* Call Now */}
               <Button variant="cta" size="xl" className="w-full text-base mt-4" asChild>
-                <a href="tel:+14032006621">
+                <a href="tel:+15874323639">
                   <Phone className="h-5 w-5 mr-2" />
                   Call Now
                 </a>

@@ -71,11 +71,11 @@ const DynamicFooter = () => {
             </p>
             <div className="flex flex-col gap-3 mb-6">
               <a
-                href="tel:+14032006621"
+                href="tel:+15874323639"
                 className="flex items-center gap-3 text-sm text-primary-foreground/80 hover:text-accent transition-colors"
               >
                 <Phone className="h-4 w-4 text-accent" />
-                (403) 200-6621
+                (587) 432-3639
               </a>
               <a
                 href="mailto:info@duckbillroofing.com"

@@ -23,7 +23,7 @@ const Privacy = () => {
           <h2 className="font-heading text-foreground">Cookies</h2>
           <p>Our website may use cookies to improve your browsing experience. You can disable cookies in your browser settings.</p>
           <h2 className="font-heading text-foreground">Contact Us</h2>
-          <p>If you have questions about this privacy policy, contact us at info@duckbillroofing.com or (403) 200-6621.</p>
+          <p>If you have questions about this privacy policy, contact us at info@duckbillroofing.com or (587) 432-3639.</p>
         </div>
       </section>
     </Layout>

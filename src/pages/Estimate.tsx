@@ -181,9 +181,9 @@ const Estimate = () => {
                   Prefer to Talk?
                 </h3>
                 <div className="space-y-4">
-                  <a href="tel:+14032006621" className="flex items-center gap-3 hover:text-accent transition-colors">
+                  <a href="tel:+15874323639" className="flex items-center gap-3 hover:text-accent transition-colors">
                     <Phone className="h-5 w-5 text-accent" />
-                    <span>(403) 200-6621</span>
+                    <span>(587) 432-3639</span>
                   </a>
                   <a href="mailto:info@duckbillroofing.com" className="flex items-center gap-3 hover:text-accent transition-colors">
                     <Mail className="h-5 w-5 text-accent" />
