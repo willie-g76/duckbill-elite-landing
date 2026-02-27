@@ -143,13 +143,13 @@ const About = () => {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link to="/estimate">
-              <Button variant="cta" size="xl">GET ESTIMATE</Button>
+              <Button variant="cta" size="xl">GET FREE ESTIMATE</Button>
             </Link>
-            <Link to="/booking">
+            <a href="tel:+15874323639">
               <Button variant="ctaOutline" size="xl" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground">
-                Book a Quote Visit
+                CALL NOW
               </Button>
-            </Link>
+            </a>
           </div>
         </div>
       </section>

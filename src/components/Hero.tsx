@@ -145,20 +145,20 @@ const Hero = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="flex flex-col sm:flex-row gap-4"
           >
-            <Link to="/booking">
+            <Link to="/estimate">
               <Button variant="cta" size="xl" className="w-full sm:w-auto">
-                SCHEDULE A QUOTE
+                GET FREE ESTIMATE
               </Button>
             </Link>
-            <Link to="/estimate">
+            <a href="tel:+15874323639">
               <Button
                 variant="ctaOutline"
                 size="xl"
                 className="w-full sm:w-auto border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
               >
-                GET ESTIMATE
+                CALL NOW
               </Button>
-            </Link>
+            </a>
           </motion.div>
 
           {/* Red Seal Badge */}
@@ -290,9 +290,9 @@ const Hero = () => {
               ))
             )}
           </div>
-          <Link to="/booking" onClick={() => setShowHail(false)} className="block mt-2">
+          <Link to="/estimate" onClick={() => setShowHail(false)} className="block mt-2">
             <Button variant="cta" className="w-full">
-              Book a Free Hail Damage Inspection
+              Get a Free Hail Damage Estimate
             </Button>
           </Link>
         </DialogContent>

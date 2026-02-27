@@ -39,7 +39,6 @@ const DynamicFooter = () => {
     { name: "Services", href: "/services" },
     { name: "Service Areas", href: "/service-areas" },
     { name: "Hail FAQ", href: "/faq" },
-    { name: "Book a Quote", href: "/booking" },
     { name: "Free Estimate", href: "/estimate" },
     { name: "Contact", href: "/contact" },
   ];

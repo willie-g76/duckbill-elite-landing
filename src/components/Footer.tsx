@@ -17,7 +17,6 @@ const Footer = () => {
     { name: "About Us", href: "/about" },
     { name: "Service Areas", href: "/service-areas" },
     { name: "Hail Damage FAQ", href: "/faq" },
-    { name: "Book a Quote", href: "/booking" },
     { name: "Free Estimate", href: "/estimate" },
     { name: "Contact", href: "/contact" },
   ];

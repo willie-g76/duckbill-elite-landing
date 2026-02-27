@@ -1,19 +1,37 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { format } from "date-fns";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Check, Phone, Mail, MapPin, Shield, Award, Clock } from "lucide-react";
+import { Check, Phone, Mail, MapPin, Shield, Award, Clock, CalendarIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+
+const timeSlots = [
+  { value: "9am", label: "9:00 AM" },
+  { value: "10am", label: "10:00 AM" },
+  { value: "11am", label: "11:00 AM" },
+  { value: "12pm", label: "12:00 PM" },
+  { value: "1pm", label: "1:00 PM" },
+  { value: "2pm", label: "2:00 PM" },
+  { value: "3pm", label: "3:00 PM" },
+  { value: "4pm", label: "4:00 PM" },
+  { value: "5pm", label: "5:00 PM" },
+];
 const Estimate = () => {
   const {
     toast
   } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [date, setDate] = useState<Date>();
+  const [timeSlot, setTimeSlot] = useState("");
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -22,9 +40,13 @@ const Estimate = () => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     setIsSubmitting(false);
     setIsSubmitted(true);
+
+    const dateInfo = date && timeSlot
+      ? ` Your preferred visit: ${format(date, "MMMM d, yyyy")} at ${timeSlots.find((t) => t.value === timeSlot)?.label}.`
+      : "";
     toast({
       title: "Estimate Request Submitted!",
-      description: "We'll get back to you within 24 hours with your free estimate."
+      description: `We'll get back to you within 24 hours with your free estimate.${dateInfo}`
     });
   };
   return <Layout>
@@ -75,8 +97,14 @@ const Estimate = () => {
                     Thank You!
                   </h2>
                   <p className="text-muted-foreground text-lg max-w-md mx-auto">
-                    Your estimate request has been submitted. Our team will review your 
+                    Your estimate request has been submitted. Our team will review your
                     information and contact you within 24 hours.
+                    {date && timeSlot && (
+                      <>
+                        <br /><br />
+                        <strong>Preferred visit:</strong> {format(date, "MMMM d, yyyy")} at {timeSlots.find((t) => t.value === timeSlot)?.label}
+                      </>
+                    )}
                   </p>
                 </div> : <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-8 shadow-soft">
                   <h2 className="font-heading text-2xl font-bold text-foreground mb-6">
@@ -143,6 +171,52 @@ const Estimate = () => {
                           <SelectItem value="week">Within a Week</SelectItem>
                           <SelectItem value="month">Within a Month</SelectItem>
                           <SelectItem value="planning">Just Planning</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  {/* Optional Date & Time Picker */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div className="space-y-2">
+                      <Label>Preferred Date (Optional)</Label>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              "w-full h-12 justify-start text-left font-normal",
+                              !date && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {date ? format(date, "PPP") : <span>Pick a date</span>}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={date}
+                            onSelect={setDate}
+                            disabled={(d) => d < new Date() || d.getDay() === 0}
+                            initialFocus
+                            className="p-3 pointer-events-auto"
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Preferred Time (Optional)</Label>
+                      <Select value={timeSlot} onValueChange={setTimeSlot}>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="Select a time slot" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {timeSlots.map((slot) => (
+                            <SelectItem key={slot.value} value={slot.value}>
+                              {slot.label}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>
