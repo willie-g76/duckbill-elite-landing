@@ -94,7 +94,7 @@ const QRLanding = () => {
             Hey, {neighbourhood.name}!
           </h1>
           <p className="text-muted-foreground text-sm">
-            Calgary's BBB A-Rated Roofers — Free Inspections
+            Calgary's Roofing Specialists — Free Quote
           </p>
         </motion.div>
 
@@ -157,14 +157,13 @@ const QRLanding = () => {
                 </Link>
               </div>
 
-              {/* Tap to call */}
-              <a
-                href="tel:+14032006621"
-                className="mt-auto flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors py-3"
-              >
-                <Phone className="h-4 w-4" />
-                <span className="text-sm">(403) 200-6621</span>
-              </a>
+              {/* Call Now */}
+              <Button variant="cta" size="xl" className="w-full mt-auto text-base" asChild>
+                <a href="tel:+14032006621">
+                  <Phone className="h-5 w-5 mr-2" />
+                  Call Now
+                </a>
+              </Button>
             </motion.div>
           ) : !selectedQuote ? (
             /* ── Initial CTA buttons ── */
@@ -192,18 +191,17 @@ const QRLanding = () => {
                   className="w-full text-base"
                   onClick={() => handleQuoteSelect("virtual")}
                 >
-                  Get a Virtual Quote
+                  Get an Online Quote
                 </Button>
               </div>
 
-              {/* Tap to call */}
-              <a
-                href="tel:+14032006621"
-                className="mt-auto flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors py-3"
-              >
-                <Phone className="h-4 w-4" />
-                <span className="text-sm">(403) 200-6621</span>
-              </a>
+              {/* Call Now */}
+              <Button variant="cta" size="xl" className="w-full mt-auto text-base" asChild>
+                <a href="tel:+14032006621">
+                  <Phone className="h-5 w-5 mr-2" />
+                  Call Now
+                </a>
+              </Button>
             </motion.div>
           ) : (
             /* ── Form state ── */
@@ -225,7 +223,7 @@ const QRLanding = () => {
               <h2 className="font-heading text-xl font-bold text-foreground mb-5">
                 {selectedQuote === "in-person"
                   ? "Schedule an In-Person Quote"
-                  : "Get a Virtual Quote"}
+                  : "Get an Online Quote"}
               </h2>
 
               <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
@@ -337,14 +335,13 @@ const QRLanding = () => {
                 </Button>
               </form>
 
-              {/* Tap to call */}
-              <a
-                href="tel:+14032006621"
-                className="flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors py-3 mt-4"
-              >
-                <Phone className="h-4 w-4" />
-                <span className="text-sm">(403) 200-6621</span>
-              </a>
+              {/* Call Now */}
+              <Button variant="cta" size="xl" className="w-full text-base mt-4" asChild>
+                <a href="tel:+14032006621">
+                  <Phone className="h-5 w-5 mr-2" />
+                  Call Now
+                </a>
+              </Button>
             </motion.div>
           )}
         </AnimatePresence>
