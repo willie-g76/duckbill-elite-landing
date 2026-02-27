@@ -1,19 +1,45 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, Wind } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
 import logoFull from "@/assets/logo-full.png";
+
+interface WeatherData {
+  temp: number;
+  description: string;
+  icon: string;
+  wind_speed: number;
+}
+
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [weather, setWeather] = useState<WeatherData | null>(null);
   const location = useLocation();
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke("get-weather");
+        if (error) throw error;
+        setWeather(data);
+      } catch (e) {
+        console.error("Failed to fetch weather:", e);
+      }
+    };
+    fetchWeather();
+    const interval = setInterval(fetchWeather, 15 * 60 * 1000);
+    return () => clearInterval(interval);
   }, []);
   const navLinks = [
     { href: "/", label: "Home" },
@@ -31,7 +57,30 @@ const Header = () => {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-card/95 backdrop-blur-md shadow-soft" : "bg-card/90 backdrop-blur-sm"}`}
     >
       <div className="container-max section-padding !py-0">
-        <div className="flex items-center justify-between h-20 mx-0 gap-[0.5px]">
+        <div className="flex items-center justify-between h-20 mx-0 gap-2">
+          <div className="flex items-center gap-3">
+          {/* Weather Widget */}
+          {weather && (
+            <Link
+              to="/faq"
+              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/80 hover:bg-secondary hover:shadow-md transition-all cursor-pointer group"
+            >
+              <img
+                src={`https://openweathermap.org/img/wn/${weather.icon}.png`}
+                alt={weather.description}
+                className="h-8 w-8 group-hover:scale-110 transition-transform"
+              />
+              <div className="flex flex-col leading-none">
+                <span className="text-sm font-bold text-foreground">{weather.temp}°C</span>
+                <span className="text-[10px] text-muted-foreground capitalize">{weather.description}</span>
+              </div>
+              <div className="hidden md:flex items-center gap-1 text-xs text-muted-foreground pl-1 border-l border-border ml-1">
+                <Wind className="h-3 w-3" />
+                <span>{weather.wind_speed}<span className="hidden lg:inline">km/h</span></span>
+              </div>
+            </Link>
+          )}
+
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
             <img src={logoFull} alt="Duckbill Roofing & Waterproofing" className="h-14 w-14 object-contain" />
@@ -42,6 +91,7 @@ const Header = () => {
               </span>
             </div>
           </Link>
+          </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-8">
@@ -58,7 +108,7 @@ const Header = () => {
 
           {/* CTA Button */}
           <div className="hidden lg:flex items-center">
-            <a href="tel:+14032006621">
+            <a href="tel:+15874323639">
               <Button variant="cta" size="lg">
                 CALL NOW
               </Button>
@@ -109,7 +159,7 @@ const Header = () => {
                   {link.label}
                 </Link>
               ))}
-              <a href="tel:+14032006621" onClick={() => setIsMobileMenuOpen(false)}>
+              <a href="tel:+15874323639" onClick={() => setIsMobileMenuOpen(false)}>
                 <Button variant="cta" size="lg" className="w-full mt-2">
                   CALL NOW
                 </Button>
