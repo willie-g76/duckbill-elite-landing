@@ -1,11 +1,12 @@
 import { useParams, Link } from "react-router-dom";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { MapPin, Phone, ArrowRight, Shield, Award, Clock, CheckCircle } from "lucide-react";
 import ContactOptions from "@/components/ContactOptions";
 import calgaryHomes from "@/assets/calgary-homes.jpg";
-import neighbourhoods from "@/data/neighbourhoods";
+import neighbourhoods, { getNeighbourhoodBySlug } from "@/data/neighbourhoods";
 
 interface AreaData {
   name: string;
@@ -86,6 +87,19 @@ for (const n of neighbourhoods) {
 const ServiceAreaLanding = () => {
   const { areaSlug } = useParams<{ areaSlug: string }>();
   const area = allAreaData[areaSlug || ""];
+
+  // Add noindex for unpublished neighbourhood pages
+  const neighbourhood = areaSlug ? getNeighbourhoodBySlug(areaSlug) : undefined;
+  const isUnpublished = neighbourhood && !neighbourhood.published;
+
+  useEffect(() => {
+    if (!isUnpublished) return;
+    const meta = document.createElement("meta");
+    meta.name = "robots";
+    meta.content = "noindex, nofollow";
+    document.head.appendChild(meta);
+    return () => { document.head.removeChild(meta); };
+  }, [isUnpublished]);
 
   if (!area) {
     return (

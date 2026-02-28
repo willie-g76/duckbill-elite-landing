@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { MapPin, Phone, ArrowRight } from "lucide-react";
 import calgaryHomes from "@/assets/calgary-homes.jpg";
-import neighbourhoods from "@/data/neighbourhoods";
+import { getPublishedNeighbourhoods } from "@/data/neighbourhoods";
 
 const serviceAreas = [
   { name: "Calgary", slug: "calgary", desc: "All neighbourhoods across the city" },
@@ -110,7 +110,7 @@ const ServiceAreas = () => {
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {neighbourhoods.map((area, index) => (
+            {getPublishedNeighbourhoods().map((area, index) => (
               <motion.div
                 key={area.slug}
                 initial={{ opacity: 0, y: 20 }}

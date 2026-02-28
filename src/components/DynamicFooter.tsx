@@ -3,9 +3,9 @@ import { Phone, Mail, MapPin } from "lucide-react";
 import { useMemo } from "react";
 import logoFull from "@/assets/logo-full.png";
 import SocialLinks from "@/components/SocialLinks";
-import neighbourhoods from "@/data/neighbourhoods";
+import { getPublishedNeighbourhoods } from "@/data/neighbourhoods";
 
-const communities = neighbourhoods.map((n) => ({ name: n.name, slug: n.slug }));
+const communities = getPublishedNeighbourhoods().map((n) => ({ name: n.name, slug: n.slug }));
 
 const DynamicFooter = () => {
   const location = useLocation();

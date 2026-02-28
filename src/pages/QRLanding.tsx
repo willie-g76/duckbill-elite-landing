@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
@@ -32,6 +32,18 @@ const QRLanding = () => {
   const [submittedName, setSubmittedName] = useState("");
   const [date, setDate] = useState<Date>();
   const [timeSlot, setTimeSlot] = useState("");
+
+  // Add noindex for unpublished neighbourhood QR pages
+  const isUnpublished = neighbourhood && !neighbourhood.published;
+
+  useEffect(() => {
+    if (!isUnpublished) return;
+    const meta = document.createElement("meta");
+    meta.name = "robots";
+    meta.content = "noindex, nofollow";
+    document.head.appendChild(meta);
+    return () => { document.head.removeChild(meta); };
+  }, [isUnpublished]);
 
   if (!neighbourhood) {
     return (

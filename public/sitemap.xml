@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Core Pages -->
+  <url><loc>https://duckbillroofing.ca/</loc><priority>1.0</priority></url>
+  <url><loc>https://duckbillroofing.ca/services</loc><priority>0.9</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas</loc><priority>0.9</priority></url>
+  <url><loc>https://duckbillroofing.ca/about</loc><priority>0.8</priority></url>
+  <url><loc>https://duckbillroofing.ca/contact</loc><priority>0.8</priority></url>
+  <url><loc>https://duckbillroofing.ca/estimate</loc><priority>0.8</priority></url>
+  <url><loc>https://duckbillroofing.ca/faq</loc><priority>0.7</priority></url>
+
+  <!-- Service Area Pages -->
+  <url><loc>https://duckbillroofing.ca/service-areas/calgary</loc><priority>0.8</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/okotoks</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/chestermere</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/drumheller</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/bearspaw</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/airdrie</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/cochrane</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/high-river</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/strathmore</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/langdon</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/black-diamond</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/crossfield</loc><priority>0.7</priority></url>
+
+  <!-- Published Calgary Communities -->
+  <url><loc>https://duckbillroofing.ca/service-areas/north-haven</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/thorncliffe</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/macewan-glen</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/mckenzie-towne</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/cranston</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/auburn-bay</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/tuscany</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/royal-oak</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/copperfield</loc><priority>0.7</priority></url>
+  <url><loc>https://duckbillroofing.ca/service-areas/new-brighton</loc><priority>0.7</priority></url>
+</urlset>
