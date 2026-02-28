@@ -1,9 +1,15 @@
+import { Helmet } from "react-helmet-async";
 import Layout from "@/components/Layout";
 import { motion } from "framer-motion";
 
 const Terms = () => {
   return (
     <Layout>
+      <Helmet>
+        <title>Terms of Service | Duckbill Roofing &amp; Waterproofing</title>
+        <meta name="description" content="Terms of service for Duckbill Roofing & Waterproofing services in Calgary, Alberta." />
+        <link rel="canonical" href="https://duckbillroofing.ca/terms" />
+      </Helmet>
       <section className="pt-32 pb-16 bg-secondary">
         <div className="container-max section-padding !py-0">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>

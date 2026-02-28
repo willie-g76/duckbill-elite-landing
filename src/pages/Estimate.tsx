@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import Layout from "@/components/Layout";
@@ -32,24 +33,76 @@ const Estimate = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [date, setDate] = useState<Date>();
   const [timeSlot, setTimeSlot] = useState("");
+  const [serviceType, setServiceType] = useState("");
+  const [urgency, setUrgency] = useState("");
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSubmitted(true);
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-    const dateInfo = date && timeSlot
-      ? ` Your preferred visit: ${format(date, "MMMM d, yyyy")} at ${timeSlots.find((t) => t.value === timeSlot)?.label}.`
-      : "";
-    toast({
-      title: "Estimate Request Submitted!",
-      description: `We'll get back to you within 24 hours with your free estimate.${dateInfo}`
-    });
+      const formData = new FormData(e.currentTarget);
+
+      const body = {
+        firstName: formData.get("firstName") as string || "",
+        lastName: formData.get("lastName") as string || "",
+        email: formData.get("email") as string || "",
+        phone: formData.get("phone") as string || "",
+        address: formData.get("address") as string || "",
+        city: formData.get("city") as string || "",
+        serviceType,
+        urgency: urgency || undefined,
+        preferredDate: date ? format(date, "yyyy-MM-dd") : undefined,
+        preferredTime: timeSlot
+          ? timeSlots.find((t) => t.value === timeSlot)?.label
+          : undefined,
+        details: formData.get("details") as string || undefined,
+        source: "estimate" as const,
+      };
+
+      const res = await fetch(`${supabaseUrl}/functions/v1/submit-lead`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${anonKey}`,
+          apikey: anonKey,
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: "Unknown error" }));
+        throw new Error(err.error || `Request failed (${res.status})`);
+      }
+
+      setIsSubmitted(true);
+
+      const dateInfo = date && timeSlot
+        ? ` Your preferred visit: ${format(date, "MMMM d, yyyy")} at ${timeSlots.find((t) => t.value === timeSlot)?.label}.`
+        : "";
+      toast({
+        title: "Estimate Request Submitted!",
+        description: `We'll get back to you within 24 hours with your free estimate.${dateInfo}`,
+      });
+    } catch (error) {
+      console.error("Estimate submission error:", error);
+      toast({
+        title: "Something went wrong",
+        description: "We couldn't send your request. Please try again or call us at (587) 432-3639.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   return <Layout>
+      <Helmet>
+        <title>Free Roofing Estimate Calgary | Get a Quote | Duckbill Roofing</title>
+        <meta name="description" content="Request a free, no-obligation roofing estimate in Calgary. Our Red Seal certified team will provide honest pricing within 24 hours." />
+        <link rel="canonical" href="https://duckbillroofing.ca/estimate" />
+      </Helmet>
       {/* Hero */}
       <section className="pt-32 pb-16 bg-secondary">
         <div className="container-max section-padding !py-0">
@@ -114,40 +167,40 @@ const Estimate = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div className="space-y-2">
                       <Label htmlFor="firstName">First Name *</Label>
-                      <Input id="firstName" placeholder="John" required className="h-12" />
+                      <Input id="firstName" name="firstName" placeholder="John" required className="h-12" />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="lastName">Last Name *</Label>
-                      <Input id="lastName" placeholder="Smith" required className="h-12" />
+                      <Input id="lastName" name="lastName" placeholder="Smith" required className="h-12" />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div className="space-y-2">
                       <Label htmlFor="email">Email Address *</Label>
-                      <Input id="email" type="email" placeholder="john@example.com" required className="h-12" />
+                      <Input id="email" name="email" type="email" placeholder="john@example.com" required className="h-12" />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="phone">Phone Number *</Label>
-                      <Input id="phone" type="tel" placeholder="(403) 555-1234" required className="h-12" />
+                      <Input id="phone" name="phone" type="tel" placeholder="(403) 555-1234" required className="h-12" />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div className="space-y-2">
                       <Label htmlFor="address">Street Address *</Label>
-                      <Input id="address" placeholder="123 Main Street" required className="h-12" />
+                      <Input id="address" name="address" placeholder="123 Main Street" required className="h-12" />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="city">City/Community *</Label>
-                      <Input id="city" placeholder="Calgary" required className="h-12" />
+                      <Input id="city" name="city" placeholder="Calgary" required className="h-12" />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div className="space-y-2">
                       <Label htmlFor="serviceType">Service Type *</Label>
-                      <Select required>
+                      <Select required value={serviceType} onValueChange={setServiceType}>
                         <SelectTrigger className="h-12">
                           <SelectValue placeholder="Select a service" />
                         </SelectTrigger>
@@ -162,7 +215,7 @@ const Estimate = () => {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="urgency">How Soon Do You Need Service?</Label>
-                      <Select>
+                      <Select value={urgency} onValueChange={setUrgency}>
                         <SelectTrigger className="h-12">
                           <SelectValue placeholder="Select timeline" />
                         </SelectTrigger>
@@ -224,7 +277,7 @@ const Estimate = () => {
 
                   <div className="mb-8 space-y-2">
                     <Label htmlFor="details">Project Details</Label>
-                    <Textarea id="details" placeholder="Please describe your roofing needs, any damage you've noticed, or questions you have..." className="min-h-[120px] resize-none" />
+                    <Textarea id="details" name="details" placeholder="Please describe your roofing needs, any damage you've noticed, or questions you have..." className="min-h-[120px] resize-none" />
                   </div>
 
                   <Button type="submit" variant="cta" size="xl" className="w-full" disabled={isSubmitting}>

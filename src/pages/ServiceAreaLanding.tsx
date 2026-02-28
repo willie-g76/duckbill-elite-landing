@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
@@ -92,15 +92,6 @@ const ServiceAreaLanding = () => {
   const neighbourhood = areaSlug ? getNeighbourhoodBySlug(areaSlug) : undefined;
   const isUnpublished = neighbourhood && !neighbourhood.published;
 
-  useEffect(() => {
-    if (!isUnpublished) return;
-    const meta = document.createElement("meta");
-    meta.name = "robots";
-    meta.content = "noindex, nofollow";
-    document.head.appendChild(meta);
-    return () => { document.head.removeChild(meta); };
-  }, [isUnpublished]);
-
   if (!area) {
     return (
       <Layout>
@@ -126,6 +117,12 @@ const ServiceAreaLanding = () => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>{`Roofing in ${area.name} | Expert Roofers | Duckbill Roofing`}</title>
+        <meta name="description" content={`Expert roofing services in ${area.name}, Alberta. BBB A rated, Red Seal certified roofers with 5-year warranty. Free estimates for ${area.name} homeowners.`} />
+        <link rel="canonical" href={`https://duckbillroofing.ca/service-areas/${area.slug}`} />
+        {isUnpublished && <meta name="robots" content="noindex, nofollow" />}
+      </Helmet>
       {/* Hero */}
       <section className="relative pt-32 pb-20">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${calgaryHomes})` }}>
@@ -251,12 +248,34 @@ const ServiceAreaLanding = () => {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "RoofingContractor",
-            name: `Duckbill Roofing - ${area.name}`,
+            name: `Duckbill Roofing & Waterproofing - ${area.name}`,
             url: `https://duckbillroofing.ca/service-areas/${area.slug}`,
             telephone: "+15874323639",
             email: "info@duckbillroofing.com",
+            image: "https://duckbillroofing.ca/og-image.png",
+            priceRange: "$$",
             areaServed: { "@type": "City", name: area.name },
-            address: { "@type": "PostalAddress", addressLocality: "Calgary", addressRegion: "AB", addressCountry: "CA" },
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Calgary",
+              addressRegion: "AB",
+              addressCountry: "CA",
+            },
+            openingHoursSpecification: [
+              {
+                "@type": "OpeningHoursSpecification",
+                dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                opens: "07:00",
+                closes: "19:00",
+              },
+            ],
+            sameAs: [
+              "https://facebook.com/duckbillroofing",
+              "https://instagram.com/duckbillroofing",
+              "https://g.page/duckbillroofing",
+              "https://tiktok.com/@duckbillroofing",
+              "https://youtube.com/@duckbillroofing",
+            ],
           }),
         }}
       />

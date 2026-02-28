@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
@@ -7,6 +8,11 @@ import SocialLinks from "@/components/SocialLinks";
 const Contact = () => {
   return (
     <Layout>
+      <Helmet>
+        <title>Contact Duckbill Roofing | Call (587) 432-3639 | Calgary Roofers</title>
+        <meta name="description" content="Get in touch with Duckbill Roofing. Call, text, WhatsApp, or email us for roofing services in Calgary and surrounding areas. 24/7 emergency response." />
+        <link rel="canonical" href="https://duckbillroofing.ca/contact" />
+      </Helmet>
       {/* Hero */}
       <section className="pt-32 pb-16 bg-secondary">
         <div className="container-max section-padding !py-0">

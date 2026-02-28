@@ -1,16 +1,20 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect, useMemo } from "react";
-import { Menu, X, Wind } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { getNeighbourhoodBySlug } from "@/data/neighbourhoods";
+import WeatherForecastPopover from "@/components/WeatherForecastPopover";
 import logoFull from "@/assets/logo-full.png";
 
 interface WeatherData {
   temp: number;
+  feels_like: number;
   description: string;
   icon: string;
   wind_speed: number;
+  rain: number;
+  snow: number;
 }
 
 const Header = () => {
@@ -74,26 +78,12 @@ const Header = () => {
       <div className="flex items-center h-20">
           {/* Weather Widget — far left, flush to edge */}
           {weather && (
-            <Link
-              to="/faq"
-              className="hidden sm:flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-r-full bg-secondary/80 hover:bg-secondary hover:shadow-md transition-all cursor-pointer group shrink-0"
-            >
-              <img
-                src={`https://openweathermap.org/img/wn/${weather.icon}.png`}
-                alt={weather.description}
-                className="h-8 w-8 group-hover:scale-110 transition-transform"
-              />
-              <div className="flex flex-col leading-none">
-                <span className="text-sm font-bold text-foreground">{weather.temp}°C</span>
-                <span className="text-[10px] text-muted-foreground capitalize">
-                  {community ? community.name : weather.description}
-                </span>
-              </div>
-              <div className="hidden md:flex items-center gap-1 text-xs text-muted-foreground pl-1 border-l border-border ml-1">
-                <Wind className="h-3 w-3" />
-                <span>{weather.wind_speed}<span className="hidden lg:inline">km/h</span></span>
-              </div>
-            </Link>
+            <WeatherForecastPopover
+              weather={weather}
+              communityName={community?.name}
+              communityLat={community?.lat}
+              communityLng={community?.lng}
+            />
           )}
 
         <div className="flex-1 flex items-center justify-between px-4 sm:px-6 lg:px-8">

@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import { Shield, Award, Users, Clock, CheckCircle } from "lucide-react";
@@ -9,6 +10,11 @@ import ContactOptions from "@/components/ContactOptions";
 const About = () => {
   return (
     <Layout>
+      <Helmet>
+        <title>About Duckbill Roofing | Calgary's Red Seal Certified Roofers</title>
+        <meta name="description" content="30+ years combined experience protecting Calgary homes. Red Seal certified, BBB A rated, with a 5-year workmanship warranty on every project." />
+        <link rel="canonical" href="https://duckbillroofing.ca/about" />
+      </Helmet>
       {/* Hero */}
       <section className="pt-32 pb-16 bg-secondary">
         <div className="container-max section-padding !py-0">

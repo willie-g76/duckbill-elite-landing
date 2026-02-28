@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { getNeighbourhoodBySlug } from "@/data/neighbourhoods";
@@ -8,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import { Check, Phone, MapPin, Shield, Hammer, CloudRain } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import logoFull from "@/assets/logo-full.png";
 
 type QuoteType = "in-person" | "virtual" | null;
@@ -26,6 +28,7 @@ const QRLanding = () => {
   const { slug } = useParams<{ slug: string }>();
   const neighbourhood = slug ? getNeighbourhoodBySlug(slug) : undefined;
 
+  const { toast } = useToast();
   const [selectedQuote, setSelectedQuote] = useState<QuoteType>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -35,15 +38,6 @@ const QRLanding = () => {
 
   // Add noindex for unpublished neighbourhood QR pages
   const isUnpublished = neighbourhood && !neighbourhood.published;
-
-  useEffect(() => {
-    if (!isUnpublished) return;
-    const meta = document.createElement("meta");
-    meta.name = "robots";
-    meta.content = "noindex, nofollow";
-    document.head.appendChild(meta);
-    return () => { document.head.removeChild(meta); };
-  }, [isUnpublished]);
 
   if (!neighbourhood) {
     return (
@@ -67,14 +61,62 @@ const QRLanding = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const name = (formData.get("name") as string)?.split(" ")[0] || "there";
+
+    const fullName = (formData.get("name") as string) || "";
+    const nameParts = fullName.trim().split(/\s+/);
+    const firstName = nameParts[0] || "";
+    const lastName = nameParts.slice(1).join(" ") || "";
+    const displayName = firstName || "there";
 
     setIsSubmitting(true);
-    // Simulate submission — replace with real endpoint
-    await new Promise((resolve) => setTimeout(resolve, 1200));
-    setIsSubmitting(false);
-    setSubmittedName(name);
-    setIsSubmitted(true);
+
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+      const body = {
+        firstName,
+        lastName,
+        email: (formData.get("email") as string) || "",
+        phone: (formData.get("phone") as string) || "",
+        address: (formData.get("address") as string) || "",
+        city: neighbourhood.name,
+        serviceType: selectedQuote === "in-person" ? "inspection" : "residential",
+        preferredDate: date ? format(date, "yyyy-MM-dd") : undefined,
+        preferredTime: timeSlot
+          ? timeSlots.find((t) => t.value === timeSlot)?.label
+          : undefined,
+        source: "qr-landing" as const,
+        community: neighbourhood.name,
+      };
+
+      const res = await fetch(`${supabaseUrl}/functions/v1/submit-lead`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${anonKey}`,
+          apikey: anonKey,
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: "Unknown error" }));
+        throw new Error(err.error || `Request failed (${res.status})`);
+      }
+
+      setSubmittedName(displayName);
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error("QR landing submission error:", error);
+      toast({
+        title: "Something went wrong",
+        description: "We couldn't send your request. Please try again or call us at (587) 432-3639.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleQuoteSelect = (type: QuoteType) => {
@@ -84,6 +126,11 @@ const QRLanding = () => {
 
   return (
     <div className="min-h-dvh bg-background flex flex-col">
+      <Helmet>
+        <title>{`Roofing in ${neighbourhood.name} | Free Quote | Duckbill Roofing`}</title>
+        <meta name="description" content={`Get a free roofing quote in ${neighbourhood.name}, Calgary. Book an in-person or virtual estimate with Duckbill Roofing.`} />
+        {isUnpublished && <meta name="robots" content="noindex, nofollow" />}
+      </Helmet>
       <div className="flex-1 w-full max-w-md mx-auto px-5 py-8 flex flex-col">
         {/* Logo */}
         <motion.div

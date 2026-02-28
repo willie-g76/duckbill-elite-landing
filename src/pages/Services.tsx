@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
@@ -110,6 +111,11 @@ const services = [
 const Services = () => {
   return (
     <Layout>
+      <Helmet>
+        <title>Roofing Services Calgary | Residential Roofing &amp; Waterproofing | Duckbill Roofing</title>
+        <meta name="description" content="Full-service roofing in Calgary — residential roofing, flat roof waterproofing, roof repairs, and inspections. Red Seal certified, 5-year warranty." />
+        <link rel="canonical" href="https://duckbillroofing.ca/services" />
+      </Helmet>
       {/* Hero */}
       <section className="pt-32 pb-16 bg-secondary">
         <div className="container-max section-padding !py-0">

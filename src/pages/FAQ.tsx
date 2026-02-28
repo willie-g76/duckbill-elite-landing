@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -78,6 +79,11 @@ const faqCategories = [
 const FAQ = () => {
   return (
     <Layout>
+      <Helmet>
+        <title>Hail Damage &amp; Roofing FAQ | Calgary Roofing Questions | Duckbill Roofing</title>
+        <meta name="description" content="Answers to common Calgary roofing questions: hail damage claims, insurance processes, roof repair timelines, and more from Duckbill Roofing." />
+        <link rel="canonical" href="https://duckbillroofing.ca/faq" />
+      </Helmet>
       {/* Hero */}
       <section className="pt-32 pb-16 bg-secondary">
         <div className="container-max section-padding !py-0">

@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,11 @@ const serviceAreas = [
 const ServiceAreas = () => {
   return (
     <Layout>
+      <Helmet>
+        <title>Service Areas | Calgary &amp; Surrounding Communities | Duckbill Roofing</title>
+        <meta name="description" content="Duckbill Roofing serves Calgary, Airdrie, Okotoks, Cochrane, Chestermere, and surrounding communities. Find your neighbourhood for local roofing services." />
+        <link rel="canonical" href="https://duckbillroofing.ca/service-areas" />
+      </Helmet>
       {/* Hero */}
       <section className="relative pt-32 pb-20">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${calgaryHomes})` }}>
