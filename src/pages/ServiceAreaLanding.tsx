@@ -59,7 +59,7 @@ const areaData: Record<string, AreaData> = {
       "Even in the heart of the Badlands, your roof deserves top-quality protection. Duckbill Roofing serves Drumheller and the surrounding valley communities with the same Red Seal certified craftsmanship we bring to every job.",
     highlights: [
       "Serving Drumheller and surrounding valley communities",
-      "Materials rated for extreme temperature swings",
+      "Materials rated for Alberta's extreme temperature swings",
       "Full insurance claim support for storm damage",
       "Comprehensive inspections and free estimates",
     ],

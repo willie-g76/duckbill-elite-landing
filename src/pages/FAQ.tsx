@@ -70,7 +70,7 @@ const faqCategories = [
       },
       {
         q: "What is your warranty?",
-        a: "We provide a 5-year workmanship warranty on all installations, plus you'll receive the manufacturer's material warranty (typically 25–50 years depending on the product chosen).",
+        a: "We provide a 5-year workmanship warranty on all installations, plus you'll receive the manufacturer's material warranty (typically 25–30+ years depending on the product chosen).",
       },
     ],
   },
