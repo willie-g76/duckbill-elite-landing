@@ -82,40 +82,6 @@ const Hero = () => {
       {/* Content */}
       <div className="relative container-max section-padding">
         <div className="max-w-3xl">
-          {/* Trust Badges */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-wrap gap-3 mb-8"
-          >
-            {/* Weather Badge - Clickable */}
-            <button
-              onClick={() => setShowWeather(true)}
-              className="badge-trust cursor-pointer hover:bg-primary-foreground/20 transition-colors"
-            >
-              <Thermometer className="h-4 w-4 text-accent" />
-              <span>Current Weather</span>
-            </button>
-
-            {/* Hail History Badge - Clickable */}
-            <button
-              onClick={() => { setShowHail(true); setHailSearch(""); }}
-              className="badge-trust cursor-pointer hover:bg-primary-foreground/20 transition-colors"
-            >
-              <CloudLightning className="h-4 w-4 text-accent" />
-              <span>Hail History</span>
-            </button>
-
-            {/* Placeholder Badge */}
-            <button
-              className="badge-trust cursor-pointer hover:bg-primary-foreground/20 transition-colors"
-            >
-              <Sparkles className="h-4 w-4 text-accent" />
-              <span>Coming Soon</span>
-            </button>
-          </motion.div>
-
           {/* Main Heading */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
@@ -134,7 +100,7 @@ const Hero = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-lg md:text-xl text-primary-foreground/90 mb-10 max-w-2xl leading-relaxed"
           >
-            Expert roofing and waterproofing solutions backed by Red Seal certified craftsmen. From hailstorms to heavy
+            Expert roofing and waterproofing solutions backed by a Red Seal certified craftsman. From hailstorms to heavy
             snow, trust Duckbill to keep your home safe and dry.
           </motion.p>
 

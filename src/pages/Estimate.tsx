@@ -100,7 +100,7 @@ const Estimate = () => {
   return <Layout>
       <Helmet>
         <title>Free Roofing Estimate Calgary | Get a Quote | Duckbill Roofing</title>
-        <meta name="description" content="Request a free, no-obligation roofing estimate in Calgary. Our Red Seal certified team will provide honest pricing within 24 hours." />
+        <meta name="description" content="Request a free, no-obligation roofing estimate in Calgary. Our team will provide honest pricing within 24 hours." />
         <link rel="canonical" href="https://duckbillroofing.ca/estimate" />
       </Helmet>
       {/* Hero */}

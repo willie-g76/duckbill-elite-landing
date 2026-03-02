@@ -132,7 +132,7 @@ const Services = () => {
               Expert Roofing Services for Calgary Homes
             </h1>
             <p className="text-muted-foreground text-lg leading-relaxed">
-              From new installations to emergency repairs, our Red Seal certified team delivers exceptional results
+              From new installations to emergency repairs, our team delivers exceptional results
               backed by our 5-year workmanship warranty.
             </p>
           </motion.div>

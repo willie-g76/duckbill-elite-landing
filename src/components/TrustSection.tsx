@@ -81,11 +81,11 @@ const TrustSection = () => {
           />
           <div className="text-center md:text-left">
             <h3 className="font-heading text-2xl font-bold text-foreground mb-2">
-              Red Seal Certified Craftsmen
+              Our Team
             </h3>
             <p className="text-muted-foreground max-w-2xl">
-              Our team holds the Interprovincial Standard Red Seal certification—Canada's 
-              highest recognition for skilled trades. This means every roof we install meets 
+              Led by a Red Seal certified journeyman—Canada's highest recognition for
+              skilled trades—our team delivers quality workmanship that meets
               the strictest national standards for quality and safety.
             </p>
           </div>

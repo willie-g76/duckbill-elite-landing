@@ -20,7 +20,7 @@ const areaData: Record<string, AreaData> = {
     name: "Calgary",
     slug: "calgary",
     description:
-      "As Calgary's trusted roofing experts, we provide comprehensive roofing services across every neighbourhood in the city. From downtown condos to suburban homes, our Red Seal certified team delivers quality workmanship backed by our 5-year warranty.",
+      "As Calgary's trusted roofing experts, we provide comprehensive roofing services across every neighbourhood in the city. From downtown condos to suburban homes, our team delivers quality workmanship backed by our 5-year warranty.",
     highlights: [
       "Serving all Calgary neighbourhoods from NW to SE",
       "24/7 emergency storm damage response",

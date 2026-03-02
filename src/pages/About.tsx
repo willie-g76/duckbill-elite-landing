@@ -31,7 +31,7 @@ const About = () => {
               Calgary's Trusted Roofing Experts
             </h1>
             <p className="text-muted-foreground text-lg leading-relaxed">
-              With a combined 30 years of experience, our Red Seal certified team has been 
+              With a combined 30 years of experience, our team has been
               protecting Calgary homes from Alberta's harshest weather.
             </p>
           </motion.div>
@@ -58,7 +58,7 @@ const About = () => {
                   homeowners getting subpar work from fly-by-night contractors, especially after hailstorms.
                 </p>
                 <p>
-                  Our team is built on Red Seal certified craftsmen — Canada's highest recognition for 
+                  Our team is led by a Red Seal certified craftsman — Canada's highest recognition for
                   skilled trades. Every roof we install meets the strictest national standards for quality and safety.
                 </p>
                 <p>

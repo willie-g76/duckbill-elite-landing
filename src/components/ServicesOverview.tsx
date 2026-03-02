@@ -51,7 +51,7 @@ const ServicesOverview = () => {
             Complete Roofing Solutions
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            From new installations to emergency repairs, our Red Seal certified team 
+            From new installations to emergency repairs, our team
             delivers exceptional results on every project.
           </p>
         </motion.div>
