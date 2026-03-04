@@ -155,8 +155,8 @@ serve(async (req) => {
         Authorization: `Bearer ${resendApiKey}`,
       },
       body: JSON.stringify({
-        from: "Duckbill Leads <leads@duckbillroofing.com>",
-        to: ["info@duckbillroofing.com"],
+        from: "Duckbill Leads <leads@duckbillroofing.ca>",
+        to: ["info@duckbillroofing.ca"],
         subject: subjectParts.join(" "),
         html: buildEmailHtml(lead),
       }),
