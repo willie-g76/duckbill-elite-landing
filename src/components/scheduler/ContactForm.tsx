@@ -77,7 +77,7 @@ export default function ContactForm({ onSubmit, defaultValues }: ContactFormProp
         <AddressAutocomplete
           id="book-address"
           name="address"
-          placeholder="Start typing your address\u2026"
+          placeholder="Start typing your address..."
           required
           className="h-12"
           defaultValue={defaultValues?.address}

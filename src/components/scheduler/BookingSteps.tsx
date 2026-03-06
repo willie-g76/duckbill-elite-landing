@@ -1,14 +1,17 @@
 import type { BookingStep } from "@/hooks/use-scheduler";
 
-const stepLabels = ["Contact", "Pick Time", "Confirm", "Booked"];
+const stepLabels = ["Contact", "Pick a Time", "Confirm"];
 
 export default function BookingSteps({ current }: { current: BookingStep }) {
+  // Map internal step 4 (success) to display as step 3 completed
+  const displayStep = current === 4 ? 3 : current;
+
   return (
     <div className="flex items-center justify-center gap-2 mb-8">
       {stepLabels.map((label, i) => {
         const stepNum = (i + 1) as BookingStep;
-        const isActive = stepNum === current;
-        const isDone = stepNum < current;
+        const isActive = stepNum === displayStep;
+        const isDone = stepNum < displayStep || current === 4;
         return (
           <div key={label} className="flex items-center gap-2">
             {i > 0 && (
@@ -30,7 +33,7 @@ export default function BookingSteps({ current }: { current: BookingStep }) {
               </div>
               <span
                 className={`text-xs font-medium ${
-                  isActive ? "text-accent" : "text-muted-foreground"
+                  isActive || isDone ? "text-accent" : "text-muted-foreground"
                 }`}
               >
                 {label}

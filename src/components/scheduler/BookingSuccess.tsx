@@ -56,9 +56,6 @@ export default function BookingSuccess({ result, address, timezone }: BookingSuc
         className="bg-secondary rounded-xl p-6 text-left space-y-3"
       >
         <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
-          <span className="font-medium text-muted-foreground">Estimator</span>
-          <span className="text-foreground">{result.assigned_to}</span>
-
           <span className="font-medium text-muted-foreground">Date</span>
           <span className="text-foreground">{dateStr}</span>
 
@@ -78,7 +75,7 @@ export default function BookingSuccess({ result, address, timezone }: BookingSuc
           start={result.slot_start}
           end={result.slot_end}
           location={address}
-          description={`Roofing estimate with ${result.assigned_to} from Duckbill Roofing.\nPhone: (587) 432-3639`}
+          description={`Roofing estimate with Duckbill Roofing.\nPhone: (587) 432-3639`}
         />
       </motion.div>
 

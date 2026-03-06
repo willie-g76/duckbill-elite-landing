@@ -5,7 +5,6 @@ import type { ContactInfo, Slot } from "@/hooks/use-scheduler";
 interface BookingConfirmStepProps {
   contact: ContactInfo;
   slot: Slot;
-  memberName: string;
   timezone: string;
   loading: boolean;
   error: Error | null;
@@ -16,7 +15,6 @@ interface BookingConfirmStepProps {
 export default function BookingConfirmStep({
   contact,
   slot,
-  memberName,
   timezone,
   loading,
   error,
@@ -80,9 +78,6 @@ export default function BookingConfirmStep({
 
           <span className="font-medium text-muted-foreground">Time</span>
           <span className="text-foreground font-semibold">{timeStr} — {endTimeStr}</span>
-
-          <span className="font-medium text-muted-foreground">Estimator</span>
-          <span className="text-foreground">{memberName}</span>
         </div>
       </div>
 

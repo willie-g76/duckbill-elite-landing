@@ -12,11 +12,7 @@ import { Phone, Clock, MapPin } from "lucide-react";
 const BookOnline = () => {
   const scheduler = useScheduler();
 
-  // Find the member name for display
-  const selectedMemberName =
-    scheduler.selectedSlot?.available_members.find(
-      (m) => m.id === scheduler.selectedMemberId
-    )?.name || "";
+  // Member name is internal only — not shown to homeowner
 
   return (
     <Layout>
@@ -86,7 +82,6 @@ const BookOnline = () => {
                   <BookingConfirmStep
                     contact={scheduler.contact}
                     slot={scheduler.selectedSlot}
-                    memberName={selectedMemberName}
                     timezone={scheduler.slotsTimezone}
                     loading={scheduler.bookingLoading}
                     error={scheduler.bookingError}

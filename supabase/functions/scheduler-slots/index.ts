@@ -39,8 +39,13 @@ serve(async (req) => {
     for (const row of configRows || []) cfg[row.key] = row.value;
 
     const timezone = (cfg.timezone as string) || "America/Edmonton";
-    const businessStart = (cfg.business_hours as { start: string; end: string })?.start || "08:00";
-    const businessEnd = (cfg.business_hours as { start: string; end: string })?.end || "19:00";
+    const businessHours = cfg.business_hours as {
+      weekday?: { start: string; end: string };
+      saturday?: { start: string; end: string };
+      start?: string; end?: string; // legacy flat format
+    } || {};
+    const weekdayHours = businessHours.weekday || { start: businessHours.start || "08:00", end: businessHours.end || "18:00" };
+    const saturdayHours = businessHours.saturday || null;
     const slotDuration = Number(cfg.slot_duration_minutes) || 90;
     const windowDays = Number(cfg.booking_window_days) || 14;
     const minLeadHours = Number(cfg.min_lead_hours) || 4;
@@ -98,24 +103,25 @@ serve(async (req) => {
 
     // Generate slots
     const slots: Slot[] = [];
-    const [startH, startM] = businessStart.split(":").map(Number);
-    const [endH, endM] = businessEnd.split(":").map(Number);
 
     // Iterate over each day
     const currentDate = new Date(dateFrom);
     while (currentDate <= dateTo) {
-      // Skip weekends (Sunday = 0, Saturday = 6)
       const dow = currentDate.getDay();
-      if (dow === 0 || dow === 6) {
+
+      // Skip Sundays; skip Saturdays if no Saturday hours configured
+      if (dow === 0 || (dow === 6 && !saturdayHours)) {
         currentDate.setDate(currentDate.getDate() + 1);
         continue;
       }
 
+      // Pick the right hours for this day of week
+      const dayHours = dow === 6 ? saturdayHours! : weekdayHours;
       const dateStr = currentDate.toISOString().split("T")[0];
 
       // Generate candidate slot times
-      const dayStart = new Date(`${dateStr}T${businessStart}:00`);
-      const dayEnd = new Date(`${dateStr}T${businessEnd}:00`);
+      const dayStart = new Date(`${dateStr}T${dayHours.start}:00`);
+      const dayEnd = new Date(`${dateStr}T${dayHours.end}:00`);
 
       let slotStart = new Date(dayStart);
       while (slotStart < dayEnd) {

@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
-import { ChevronDown, ChevronRight, ArrowLeft, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import TimeChip from "./TimeChip";
 import type { Slot } from "@/hooks/use-scheduler";
 
 interface SlotPickerProps {
@@ -12,47 +11,79 @@ interface SlotPickerProps {
   onBack: () => void;
 }
 
-interface DayGroup {
-  dateKey: string;
-  label: string;
-  slots: Slot[];
-  hasClustered: boolean;
-}
+const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export default function SlotPicker({ slots, loading, timezone, onSelect, onBack }: SlotPickerProps) {
-  const [expandedDay, setExpandedDay] = useState<string | null>(null);
-  const [selected, setSelected] = useState<{ slotIdx: string; memberId: string } | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [viewMonth, setViewMonth] = useState(() => {
+    const now = new Date();
+    return { year: now.getFullYear(), month: now.getMonth() };
+  });
 
-  const dayGroups = useMemo(() => {
-    const groups = new Map<string, DayGroup>();
-
+  // Group slots by date (YYYY-MM-DD)
+  const slotsByDate = useMemo(() => {
+    const map = new Map<string, Slot[]>();
     for (const slot of slots) {
-      const d = new Date(slot.start);
-      const dateKey = d.toLocaleDateString("en-CA", { timeZone: timezone });
-      const label = d.toLocaleDateString("en-US", {
-        weekday: "long",
-        month: "long",
-        day: "numeric",
-        timeZone: timezone,
-      });
-
-      if (!groups.has(dateKey)) {
-        groups.set(dateKey, { dateKey, label, slots: [], hasClustered: false });
-      }
-      const group = groups.get(dateKey)!;
-      group.slots.push(slot);
-      if (slot.clustered) group.hasClustered = true;
+      const dateKey = new Date(slot.start).toLocaleDateString("en-CA", { timeZone: timezone });
+      if (!map.has(dateKey)) map.set(dateKey, []);
+      map.get(dateKey)!.push(slot);
     }
-
-    return Array.from(groups.values());
+    return map;
   }, [slots, timezone]);
 
-  // Auto-expand first day
-  useMemo(() => {
-    if (dayGroups.length > 0 && !expandedDay) {
-      setExpandedDay(dayGroups[0].dateKey);
+  // Build the calendar grid for the current view month
+  const calendarDays = useMemo(() => {
+    const { year, month } = viewMonth;
+    const firstDay = new Date(year, month, 1);
+    const startPad = firstDay.getDay(); // 0=Sun
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const today = new Date().toLocaleDateString("en-CA", { timeZone: timezone });
+
+    const days: { date: string; day: number; inMonth: boolean; hasSlots: boolean; isPast: boolean; slotCount: number }[] = [];
+
+    // Padding days from previous month
+    for (let i = 0; i < startPad; i++) {
+      days.push({ date: "", day: 0, inMonth: false, hasSlots: false, isPast: true, slotCount: 0 });
     }
-  }, [dayGroups]);
+
+    // Days in current month
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+      const slotsForDay = slotsByDate.get(dateStr) || [];
+      days.push({
+        date: dateStr,
+        day: d,
+        inMonth: true,
+        hasSlots: slotsForDay.length > 0,
+        isPast: dateStr < today,
+        slotCount: slotsForDay.length,
+      });
+    }
+
+    return days;
+  }, [viewMonth, slotsByDate, timezone]);
+
+  const monthLabel = new Date(viewMonth.year, viewMonth.month).toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+
+  const goToPrevMonth = () => {
+    setViewMonth((prev) => {
+      const m = prev.month - 1;
+      return m < 0 ? { year: prev.year - 1, month: 11 } : { year: prev.year, month: m };
+    });
+  };
+
+  const goToNextMonth = () => {
+    setViewMonth((prev) => {
+      const m = prev.month + 1;
+      return m > 11 ? { year: prev.year + 1, month: 0 } : { year: prev.year, month: m };
+    });
+  };
+
+  // Time slots for the selected date
+  const selectedDateSlots = selectedDate ? (slotsByDate.get(selectedDate) || []) : [];
 
   if (loading) {
     return (
@@ -79,19 +110,9 @@ export default function SlotPicker({ slots, loading, timezone, onSelect, onBack 
     );
   }
 
-  const handleChipClick = (slot: Slot, memberId: string) => {
-    const key = `${slot.start}-${memberId}`;
-    if (selected?.slotIdx === key) {
-      // Already selected — confirm
-      onSelect(slot, memberId);
-    } else {
-      setSelected({ slotIdx: key, memberId });
-    }
-  };
-
   return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between mb-4">
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
         <button
           type="button"
           onClick={onBack}
@@ -100,91 +121,111 @@ export default function SlotPicker({ slots, loading, timezone, onSelect, onBack 
           <ArrowLeft className="h-4 w-4" /> Back
         </button>
         <p className="text-sm text-muted-foreground">
-          {slots.length} time{slots.length !== 1 ? "s" : ""} available
+          {selectedDate ? "Pick a time below" : "Pick a day"}
         </p>
       </div>
 
-      {dayGroups.map((group) => {
-        const isExpanded = expandedDay === group.dateKey;
-        return (
-          <div
-            key={group.dateKey}
-            className="border border-border rounded-xl overflow-hidden"
-          >
-            <button
-              type="button"
-              onClick={() => setExpandedDay(isExpanded ? null : group.dateKey)}
-              className="w-full flex items-center justify-between px-4 py-3 bg-secondary/50 hover:bg-secondary transition-colors"
-            >
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-foreground">{group.label}</span>
-                {group.hasClustered && (
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
-                    We'll be in your area!
-                  </span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground">
-                  {group.slots.length} slot{group.slots.length !== 1 ? "s" : ""}
+      {/* Calendar Month View */}
+      <div className="border border-border rounded-xl overflow-hidden">
+        {/* Month header */}
+        <div className="flex items-center justify-between px-4 py-3 bg-secondary/50">
+          <button type="button" onClick={goToPrevMonth} className="p-1 hover:bg-secondary rounded-md transition-colors">
+            <ChevronLeft className="h-5 w-5 text-muted-foreground" />
+          </button>
+          <span className="font-semibold text-foreground">{monthLabel}</span>
+          <button type="button" onClick={goToNextMonth} className="p-1 hover:bg-secondary rounded-md transition-colors">
+            <ChevronRight className="h-5 w-5 text-muted-foreground" />
+          </button>
+        </div>
+
+        {/* Day headers */}
+        <div className="grid grid-cols-7 border-b border-border">
+          {DAYS_OF_WEEK.map((d) => (
+            <div key={d} className="text-center text-xs font-medium text-muted-foreground py-2">
+              {d}
+            </div>
+          ))}
+        </div>
+
+        {/* Day cells */}
+        <div className="grid grid-cols-7">
+          {calendarDays.map((day, i) => {
+            if (!day.inMonth) {
+              return <div key={i} className="aspect-square border-b border-r border-border/30" />;
+            }
+
+            const isSelected = day.date === selectedDate;
+            const isAvailable = day.hasSlots && !day.isPast;
+
+            return (
+              <button
+                key={day.date}
+                type="button"
+                disabled={!isAvailable}
+                onClick={() => setSelectedDate(isSelected ? null : day.date)}
+                className={`aspect-square flex flex-col items-center justify-center border-b border-r border-border/30 transition-all relative ${
+                  isSelected
+                    ? "bg-accent text-accent-foreground font-bold"
+                    : isAvailable
+                    ? "hover:bg-accent/10 cursor-pointer"
+                    : "text-muted-foreground/40 cursor-default"
+                }`}
+              >
+                <span className={`text-sm ${isAvailable && !isSelected ? "text-foreground font-medium" : ""}`}>
+                  {day.day}
                 </span>
-                {isExpanded ? (
-                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                ) : (
-                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                {isAvailable && !isSelected && (
+                  <span className="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-accent" />
                 )}
-              </div>
-            </button>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
-            {isExpanded && (
-              <div className="p-4">
-                <div className="flex flex-wrap gap-2">
-                  {group.slots.map((slot) => {
-                    const timeStr = new Date(slot.start).toLocaleTimeString("en-US", {
-                      hour: "numeric",
-                      minute: "2-digit",
-                      timeZone: timezone,
-                    });
+      {/* Time Slots for Selected Date */}
+      {selectedDate && selectedDateSlots.length > 0 && (
+        <div className="space-y-3">
+          <h3 className="font-semibold text-foreground">
+            {new Date(selectedDate + "T12:00:00").toLocaleDateString("en-US", {
+              weekday: "long",
+              month: "long",
+              day: "numeric",
+            })}
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {selectedDateSlots.map((slot) => {
+              const timeStr = new Date(slot.start).toLocaleTimeString("en-US", {
+                hour: "numeric",
+                minute: "2-digit",
+                timeZone: timezone,
+              });
+              // Pick the primary member (first available), but don't show the name
+              const memberId = slot.available_members[0]?.id;
 
-                    // Show a chip for each available member
-                    return slot.available_members.map((member) => {
-                      const key = `${slot.start}-${member.id}`;
-                      return (
-                        <TimeChip
-                          key={key}
-                          time={timeStr}
-                          memberName={member.name}
-                          clustered={slot.clustered}
-                          selected={selected?.slotIdx === key}
-                          onClick={() => handleChipClick(slot, member.id)}
-                        />
-                      );
-                    });
-                  })}
-                </div>
-                {selected && group.slots.some((s) =>
-                  s.available_members.some((m) => `${s.start}-${m.id}` === selected.slotIdx)
-                ) && (
-                  <div className="mt-4 text-center">
-                    <Button
-                      variant="cta"
-                      size="lg"
-                      onClick={() => {
-                        const slot = group.slots.find((s) =>
-                          s.available_members.some((m) => `${s.start}-${m.id}` === selected.slotIdx)
-                        );
-                        if (slot) onSelect(slot, selected.memberId);
-                      }}
-                    >
-                      SELECT THIS TIME
-                    </Button>
-                  </div>
-                )}
-              </div>
-            )}
+              return (
+                <button
+                  key={slot.start}
+                  type="button"
+                  onClick={() => onSelect(slot, memberId)}
+                  className={`px-5 py-3 rounded-xl border-2 transition-all text-sm font-semibold ${
+                    slot.clustered
+                      ? "border-green-300 bg-green-50/50 hover:border-green-500 hover:bg-green-50 text-foreground"
+                      : "border-border bg-card hover:border-accent/50 hover:shadow-sm text-foreground"
+                  }`}
+                >
+                  {timeStr}
+                  {slot.clustered && (
+                    <span className="block text-[10px] font-medium text-green-600 mt-0.5">
+                      We'll be nearby!
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
-        );
-      })}
+        </div>
+      )}
     </div>
   );
 }
