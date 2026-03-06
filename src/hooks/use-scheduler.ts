@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -55,6 +55,14 @@ export interface BookingResult {
 
 export type BookingStep = 1 | 2 | 3 | 4;
 
+/** Get YYYY-MM-DD for the first and last day of a month */
+function getMonthRange(year: number, month: number) {
+  const dateFrom = `${year}-${String(month + 1).padStart(2, "0")}-01`;
+  const lastDay = new Date(year, month + 1, 0).getDate();
+  const dateTo = `${year}-${String(month + 1).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+  return { dateFrom, dateTo };
+}
+
 export function useScheduler() {
   const queryClient = useQueryClient();
   const [step, setStep] = useState<BookingStep>(1);
@@ -62,6 +70,19 @@ export function useScheduler() {
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
   const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
   const [bookingResult, setBookingResult] = useState<BookingResult | null>(null);
+  const stepRef = useRef<HTMLDivElement>(null);
+
+  // The month the calendar is currently viewing
+  const now = new Date();
+  const [viewMonth, setViewMonth] = useState({ year: now.getFullYear(), month: now.getMonth() });
+
+  // Scroll to top of booking card when step changes
+  useEffect(() => {
+    if (stepRef.current) {
+      const top = stepRef.current.getBoundingClientRect().top + window.scrollY - 100; // 100px offset for fixed header
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+  }, [step]);
 
   // Fetch scheduler config
   const configQuery = useQuery<SchedulerConfig>({
@@ -74,14 +95,20 @@ export function useScheduler() {
     staleTime: 5 * 60 * 1000,
   });
 
-  // Fetch available slots (enabled only when contact is set)
+  // Fetch available slots for the currently viewed month
+  const { dateFrom, dateTo } = getMonthRange(viewMonth.year, viewMonth.month);
+
   const slotsQuery = useQuery<SlotsResponse>({
-    queryKey: ["scheduler-slots", contact?.postalCode],
+    queryKey: ["scheduler-slots", contact?.postalCode, dateFrom, dateTo],
     queryFn: async () => {
       const res = await fetch(`${SUPABASE_URL}/functions/v1/scheduler-slots`, {
         method: "POST",
         headers,
-        body: JSON.stringify({ postal_code: contact?.postalCode }),
+        body: JSON.stringify({
+          postal_code: contact?.postalCode,
+          date_from: dateFrom,
+          date_to: dateTo,
+        }),
       });
       if (!res.ok) throw new Error("Failed to load available slots");
       return res.json();
@@ -112,7 +139,6 @@ export function useScheduler() {
         }),
       });
       if (res.status === 409) {
-        // Slot taken — refresh slots and go back
         queryClient.invalidateQueries({ queryKey: ["scheduler-slots"] });
         throw new Error("SLOT_TAKEN");
       }
@@ -163,6 +189,7 @@ export function useScheduler() {
 
   return {
     step,
+    stepRef,
     contact,
     selectedSlot,
     selectedMemberId,
@@ -175,6 +202,8 @@ export function useScheduler() {
     postalCodeZone: slotsQuery.data?.postal_code_zone,
     bookingLoading: bookMutation.isPending,
     bookingError: bookMutation.error,
+    viewMonth,
+    setViewMonth,
     submitContact,
     selectSlot,
     confirmBooking,

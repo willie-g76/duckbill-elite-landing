@@ -7,18 +7,24 @@ interface SlotPickerProps {
   slots: Slot[];
   loading: boolean;
   timezone: string;
+  viewMonth: { year: number; month: number };
+  onViewMonthChange: (m: { year: number; month: number }) => void;
   onSelect: (slot: Slot, memberId: string) => void;
   onBack: () => void;
 }
 
 const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-export default function SlotPicker({ slots, loading, timezone, onSelect, onBack }: SlotPickerProps) {
+export default function SlotPicker({
+  slots,
+  loading,
+  timezone,
+  viewMonth,
+  onViewMonthChange,
+  onSelect,
+  onBack,
+}: SlotPickerProps) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [viewMonth, setViewMonth] = useState(() => {
-    const now = new Date();
-    return { year: now.getFullYear(), month: now.getMonth() };
-  });
 
   // Group slots by date (YYYY-MM-DD)
   const slotsByDate = useMemo(() => {
@@ -35,18 +41,16 @@ export default function SlotPicker({ slots, loading, timezone, onSelect, onBack 
   const calendarDays = useMemo(() => {
     const { year, month } = viewMonth;
     const firstDay = new Date(year, month, 1);
-    const startPad = firstDay.getDay(); // 0=Sun
+    const startPad = firstDay.getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const today = new Date().toLocaleDateString("en-CA", { timeZone: timezone });
 
-    const days: { date: string; day: number; inMonth: boolean; hasSlots: boolean; isPast: boolean; slotCount: number }[] = [];
+    const days: { date: string; day: number; inMonth: boolean; hasSlots: boolean; isPast: boolean }[] = [];
 
-    // Padding days from previous month
     for (let i = 0; i < startPad; i++) {
-      days.push({ date: "", day: 0, inMonth: false, hasSlots: false, isPast: true, slotCount: 0 });
+      days.push({ date: "", day: 0, inMonth: false, hasSlots: false, isPast: true });
     }
 
-    // Days in current month
     for (let d = 1; d <= daysInMonth; d++) {
       const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
       const slotsForDay = slotsByDate.get(dateStr) || [];
@@ -56,7 +60,6 @@ export default function SlotPicker({ slots, loading, timezone, onSelect, onBack 
         inMonth: true,
         hasSlots: slotsForDay.length > 0,
         isPast: dateStr < today,
-        slotCount: slotsForDay.length,
       });
     }
 
@@ -69,17 +72,15 @@ export default function SlotPicker({ slots, loading, timezone, onSelect, onBack 
   });
 
   const goToPrevMonth = () => {
-    setViewMonth((prev) => {
-      const m = prev.month - 1;
-      return m < 0 ? { year: prev.year - 1, month: 11 } : { year: prev.year, month: m };
-    });
+    const m = viewMonth.month - 1;
+    onViewMonthChange(m < 0 ? { year: viewMonth.year - 1, month: 11 } : { year: viewMonth.year, month: m });
+    setSelectedDate(null);
   };
 
   const goToNextMonth = () => {
-    setViewMonth((prev) => {
-      const m = prev.month + 1;
-      return m > 11 ? { year: prev.year + 1, month: 0 } : { year: prev.year, month: m };
-    });
+    const m = viewMonth.month + 1;
+    onViewMonthChange(m > 11 ? { year: viewMonth.year + 1, month: 0 } : { year: viewMonth.year, month: m });
+    setSelectedDate(null);
   };
 
   // Time slots for the selected date
@@ -89,7 +90,7 @@ export default function SlotPicker({ slots, loading, timezone, onSelect, onBack 
     return (
       <div className="flex flex-col items-center justify-center py-16 gap-4">
         <Loader2 className="h-8 w-8 animate-spin text-accent" />
-        <p className="text-muted-foreground">Finding available times in your area...</p>
+        <p className="text-muted-foreground">Finding available times...</p>
       </div>
     );
   }
@@ -97,15 +98,19 @@ export default function SlotPicker({ slots, loading, timezone, onSelect, onBack 
   if (slots.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-lg text-foreground font-medium mb-2">No available slots right now</p>
+        <p className="text-lg text-foreground font-medium mb-2">No available slots this month</p>
         <p className="text-muted-foreground mb-6">
-          Please call us at{" "}
-          <a href="tel:+15874323639" className="text-accent font-semibold">(587) 432-3639</a>{" "}
-          to schedule directly.
+          Try another month, or call us at{" "}
+          <a href="tel:+15874323639" className="text-accent font-semibold">(587) 432-3639</a>.
         </p>
-        <Button variant="outline" onClick={onBack}>
-          <ArrowLeft className="h-4 w-4 mr-2" /> Go Back
-        </Button>
+        <div className="flex justify-center gap-3">
+          <Button variant="outline" onClick={onBack}>
+            <ArrowLeft className="h-4 w-4 mr-2" /> Go Back
+          </Button>
+          <Button variant="outline" onClick={goToNextMonth}>
+            Next Month <ChevronRight className="h-4 w-4 ml-1" />
+          </Button>
+        </div>
       </div>
     );
   }
@@ -200,7 +205,6 @@ export default function SlotPicker({ slots, loading, timezone, onSelect, onBack 
                 minute: "2-digit",
                 timeZone: timezone,
               });
-              // Pick the primary member (first available), but don't show the name
               const memberId = slot.available_members[0]?.id;
 
               return (

@@ -58,7 +58,7 @@ const BookOnline = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="lg:col-span-2"
             >
-              <div className="bg-card rounded-2xl p-6 md:p-8 shadow-soft">
+              <div ref={scheduler.stepRef} className="bg-card rounded-2xl p-6 md:p-8 shadow-soft">
                 <BookingSteps current={scheduler.step} />
 
                 {scheduler.step === 1 && (
@@ -73,6 +73,8 @@ const BookOnline = () => {
                     slots={scheduler.slots}
                     loading={scheduler.slotsLoading}
                     timezone={scheduler.slotsTimezone}
+                    viewMonth={scheduler.viewMonth}
+                    onViewMonthChange={scheduler.setViewMonth}
                     onSelect={scheduler.selectSlot}
                     onBack={scheduler.goBack}
                   />
