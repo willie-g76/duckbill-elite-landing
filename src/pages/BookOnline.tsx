@@ -166,7 +166,7 @@ const BookOnline = () => {
                   </a>
                   <div className="flex items-start gap-3">
                     <Clock className="h-5 w-5 text-accent mt-0.5" />
-                    <span>Mon–Fri, 8 AM – 7 PM</span>
+                    <span>7 Days a Week, 8 AM – 6 PM</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <MapPin className="h-5 w-5 text-accent mt-0.5" />

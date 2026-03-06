@@ -30,56 +30,58 @@ export default function ContactForm({ onSubmit, defaultValues }: ContactFormProp
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-5" autoComplete="on">
       <div className="space-y-2">
-        <Label htmlFor="book-name">Full Name *</Label>
+        <Label htmlFor="name">Full Name *</Label>
         <Input
-          id="book-name"
+          id="name"
           name="name"
           placeholder="John Smith"
           autoComplete="name"
           required
           defaultValue={defaultValues ? `${defaultValues.firstName} ${defaultValues.lastName}`.trim() : ""}
-          className="h-12"
+          className="h-12 text-base"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="book-phone">Phone *</Label>
+        <Label htmlFor="phone">Phone *</Label>
         <Input
-          id="book-phone"
+          id="phone"
           name="phone"
           type="tel"
+          inputMode="tel"
           placeholder="(403) 555-1234"
           autoComplete="tel"
           required
           defaultValue={defaultValues?.phone}
-          className="h-12"
+          className="h-12 text-base"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="book-email">Email</Label>
+        <Label htmlFor="email">Email</Label>
         <Input
-          id="book-email"
+          id="email"
           name="email"
           type="email"
+          inputMode="email"
           placeholder="john@example.com"
           autoComplete="email"
           defaultValue={defaultValues?.email}
-          className="h-12"
+          className="h-12 text-base"
         />
         <p className="text-xs text-muted-foreground">For booking confirmation and calendar invite</p>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="book-address">Address *</Label>
+        <Label htmlFor="address">Address *</Label>
         <AddressAutocomplete
-          id="book-address"
+          id="address"
           name="address"
           placeholder="Start typing your address..."
           required
-          className="h-12"
+          className="h-12 text-base"
           defaultValue={defaultValues?.address}
           onAddressParsed={setAddressComponents}
         />

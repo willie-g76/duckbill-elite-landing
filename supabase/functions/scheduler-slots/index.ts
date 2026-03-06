@@ -61,19 +61,21 @@ serve(async (req) => {
     }
 
     // Determine date range
+    // We work with date strings (YYYY-MM-DD) and build Mountain Time timestamps
     const now = new Date();
     const minStart = new Date(now.getTime() + minLeadHours * 60 * 60 * 1000);
 
-    const dateFrom = body.date_from
-      ? new Date(body.date_from + "T00:00:00")
-      : new Date(now.toLocaleDateString("en-CA", { timeZone: timezone }) + "T00:00:00");
+    const todayStr = now.toLocaleDateString("en-CA", { timeZone: timezone });
+    const dateFromStr = body.date_from || todayStr;
+    const dateToStr = body.date_to || (() => {
+      const d = new Date(dateFromStr + "T12:00:00Z");
+      d.setDate(d.getDate() + windowDays);
+      return d.toISOString().split("T")[0];
+    })();
 
-    const dateTo = body.date_to
-      ? new Date(body.date_to + "T23:59:59")
-      : new Date(dateFrom.getTime() + windowDays * 24 * 60 * 60 * 1000);
-
-    const timeMin = dateFrom.toISOString();
-    const timeMax = dateTo.toISOString();
+    // For Google Calendar FreeBusy, we need rough UTC bounds (generous range)
+    const timeMin = new Date(dateFromStr + "T00:00:00Z").toISOString();
+    const timeMax = new Date(dateToStr + "T23:59:59Z").toISOString();
 
     // Query Google Calendar FreeBusy for all team members
     // Use the first member's email to impersonate for the FreeBusy query
@@ -100,19 +102,37 @@ serve(async (req) => {
     // Generate slots
     const slots: Slot[] = [];
 
+    // Helper: convert "YYYY-MM-DD HH:MM" in Mountain Time to a UTC Date
+    // We use Intl to figure out the UTC offset for the given date in the timezone
+    function mountainToUTC(dateStr: string, timeStr: string): Date {
+      // Create a date in the target timezone by parsing components
+      const [hours, minutes] = timeStr.split(":").map(Number);
+      // Use a reference point to determine UTC offset
+      const ref = new Date(`${dateStr}T12:00:00Z`);
+      const utcStr = ref.toLocaleString("en-US", { timeZone: "UTC" });
+      const tzStr = ref.toLocaleString("en-US", { timeZone: timezone });
+      const utcRef = new Date(utcStr);
+      const tzRef = new Date(tzStr);
+      const offsetMs = utcRef.getTime() - tzRef.getTime();
+      // Build the local time and apply offset to get UTC
+      const local = new Date(`${dateStr}T${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:00Z`);
+      return new Date(local.getTime() + offsetMs);
+    }
+
     // Iterate over each day (7 days a week)
-    const currentDate = new Date(dateFrom);
-    while (currentDate <= dateTo) {
-      const dateStr = currentDate.toISOString().split("T")[0];
+    const currentDateObj = new Date(dateFromStr + "T12:00:00Z");
+    const endDateObj = new Date(dateToStr + "T12:00:00Z");
+    while (currentDateObj <= endDateObj) {
+      const dateStr = currentDateObj.toISOString().split("T")[0];
 
-      // Generate candidate slot times
-      const slotDayStart = new Date(`${dateStr}T${dayStart}:00`);
-      const slotDayEnd = new Date(`${dateStr}T${dayEnd}:00`);
+      // Generate candidate slot times in Mountain Time
+      const slotDayStartUTC = mountainToUTC(dateStr, dayStart);
+      const slotDayEndUTC = mountainToUTC(dateStr, dayEnd);
 
-      let slotStart = new Date(slotDayStart);
-      while (slotStart < slotDayEnd) {
+      let slotStart = new Date(slotDayStartUTC);
+      while (slotStart < slotDayEndUTC) {
         const slotEnd = new Date(slotStart.getTime() + slotDuration * 60 * 1000);
-        if (slotEnd > slotDayEnd) break;
+        if (slotEnd > slotDayEndUTC) break;
 
         // Skip slots that are too soon
         if (slotStart < minStart) {
@@ -192,16 +212,11 @@ serve(async (req) => {
         slotStart = new Date(slotStart.getTime() + slotDuration * 60 * 1000);
       }
 
-      currentDate.setDate(currentDate.getDate() + 1);
+      currentDateObj.setDate(currentDateObj.getDate() + 1);
     }
 
-    // Sort: clustered first (by score desc), then chronological
-    slots.sort((a, b) => {
-      if (a.clustered && !b.clustered) return -1;
-      if (!a.clustered && b.clustered) return 1;
-      if (a.cluster_score !== b.cluster_score) return b.cluster_score - a.cluster_score;
-      return new Date(a.start).getTime() - new Date(b.start).getTime();
-    });
+    // Sort chronologically — clustering info is kept on slots for frontend use
+    slots.sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
 
     return jsonResponse({
       slots,

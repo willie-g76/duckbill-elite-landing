@@ -22,11 +22,15 @@ function buildGoogleCalUrl(props: CalendarLinksProps): string {
 }
 
 function buildICSBlob(props: CalendarLinksProps): string {
+  const now = formatICSDate(new Date());
+  const uid = `booking-${Date.now()}@duckbillroofing.ca`;
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
     "PRODID:-//Duckbill Roofing//Booking//EN",
     "BEGIN:VEVENT",
+    `UID:${uid}`,
+    `DTSTAMP:${now}`,
     `DTSTART:${formatICSDate(new Date(props.start))}`,
     `DTEND:${formatICSDate(new Date(props.end))}`,
     `SUMMARY:${props.title}`,
