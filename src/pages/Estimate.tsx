@@ -1,40 +1,21 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
-import { format } from "date-fns";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Check, Phone, Mail, MapPin, Shield, Award, Clock, CalendarIcon } from "lucide-react";
+import { Check, Phone, Mail, MapPin, Shield, Award, Clock, CalendarDays } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
+import AddressAutocomplete from "@/components/AddressAutocomplete";
 
-const timeSlots = [
-  { value: "9am", label: "9:00 AM" },
-  { value: "10am", label: "10:00 AM" },
-  { value: "11am", label: "11:00 AM" },
-  { value: "12pm", label: "12:00 PM" },
-  { value: "1pm", label: "1:00 PM" },
-  { value: "2pm", label: "2:00 PM" },
-  { value: "3pm", label: "3:00 PM" },
-  { value: "4pm", label: "4:00 PM" },
-  { value: "5pm", label: "5:00 PM" },
-];
 const Estimate = () => {
   const {
     toast
   } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [date, setDate] = useState<Date>();
-  const [timeSlot, setTimeSlot] = useState("");
-  const [serviceType, setServiceType] = useState("");
-  const [urgency, setUrgency] = useState("");
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -44,21 +25,19 @@ const Estimate = () => {
       const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
       const formData = new FormData(e.currentTarget);
+      const fullName = (formData.get("name") as string) || "";
+      const nameParts = fullName.trim().split(/\s+/);
+      const firstName = nameParts[0] || "";
+      const lastName = nameParts.slice(1).join(" ") || "";
 
       const body = {
-        firstName: formData.get("firstName") as string || "",
-        lastName: formData.get("lastName") as string || "",
+        firstName,
+        lastName,
         email: formData.get("email") as string || "",
         phone: formData.get("phone") as string || "",
         address: formData.get("address") as string || "",
-        city: formData.get("city") as string || "",
-        serviceType,
-        urgency: urgency || undefined,
-        preferredDate: date ? format(date, "yyyy-MM-dd") : undefined,
-        preferredTime: timeSlot
-          ? timeSlots.find((t) => t.value === timeSlot)?.label
-          : undefined,
-        details: formData.get("details") as string || undefined,
+        city: "",
+        serviceType: "residential",
         source: "estimate" as const,
       };
 
@@ -78,13 +57,9 @@ const Estimate = () => {
       }
 
       setIsSubmitted(true);
-
-      const dateInfo = date && timeSlot
-        ? ` Your preferred visit: ${format(date, "MMMM d, yyyy")} at ${timeSlots.find((t) => t.value === timeSlot)?.label}.`
-        : "";
       toast({
         title: "Estimate Request Submitted!",
-        description: `We'll get back to you within 24 hours with your free estimate.${dateInfo}`,
+        description: "We'll get back to you within 24 hours with your free estimate.",
       });
     } catch (error) {
       console.error("Estimate submission error:", error);
@@ -152,132 +127,35 @@ const Estimate = () => {
                   <p className="text-muted-foreground text-lg max-w-md mx-auto">
                     Your estimate request has been submitted. Our team will review your
                     information and contact you within 24 hours.
-                    {date && timeSlot && (
-                      <>
-                        <br /><br />
-                        <strong>Preferred visit:</strong> {format(date, "MMMM d, yyyy")} at {timeSlots.find((t) => t.value === timeSlot)?.label}
-                      </>
-                    )}
                   </p>
                 </div> : <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-8 shadow-soft">
                   <h2 className="font-heading text-2xl font-bold text-foreground mb-6">
-                    Tell Us About Your Project
+                    Get Your Free Estimate
                   </h2>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div className="space-y-5 mb-8">
                     <div className="space-y-2">
-                      <Label htmlFor="firstName">First Name *</Label>
-                      <Input id="firstName" name="firstName" placeholder="John" required className="h-12" />
+                      <Label htmlFor="est-name">Full Name *</Label>
+                      <Input id="est-name" name="name" placeholder="John Smith" autoComplete="name" required className="h-12" />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="lastName">Last Name *</Label>
-                      <Input id="lastName" name="lastName" placeholder="Smith" required className="h-12" />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email Address *</Label>
-                      <Input id="email" name="email" type="email" placeholder="john@example.com" required className="h-12" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Phone Number *</Label>
-                      <Input id="phone" name="phone" type="tel" placeholder="(403) 555-1234" required className="h-12" />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="address">Street Address *</Label>
-                      <Input id="address" name="address" placeholder="123 Main Street" required className="h-12" />
+                      <Label htmlFor="est-address">Address *</Label>
+                      <AddressAutocomplete
+                        id="est-address"
+                        name="address"
+                        placeholder="Start typing your address…"
+                        required
+                        className="h-12"
+                      />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="city">City/Community *</Label>
-                      <Input id="city" name="city" placeholder="Calgary" required className="h-12" />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="serviceType">Service Type *</Label>
-                      <Select required value={serviceType} onValueChange={setServiceType}>
-                        <SelectTrigger className="h-12">
-                          <SelectValue placeholder="Select a service" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="residential">Residential Roofing</SelectItem>
-                          <SelectItem value="waterproofing">Flat Roof Waterproofing</SelectItem>
-                          <SelectItem value="repair">Roof Repair</SelectItem>
-                          <SelectItem value="inspection">Roof Inspection</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Label htmlFor="est-email">Email *</Label>
+                      <Input id="est-email" name="email" type="email" placeholder="john@example.com" autoComplete="email" required className="h-12" />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="urgency">How Soon Do You Need Service?</Label>
-                      <Select value={urgency} onValueChange={setUrgency}>
-                        <SelectTrigger className="h-12">
-                          <SelectValue placeholder="Select timeline" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="emergency">Emergency (ASAP)</SelectItem>
-                          <SelectItem value="week">Within a Week</SelectItem>
-                          <SelectItem value="month">Within a Month</SelectItem>
-                          <SelectItem value="planning">Just Planning</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Label htmlFor="est-phone">Phone *</Label>
+                      <Input id="est-phone" name="phone" type="tel" placeholder="(403) 555-1234" autoComplete="tel" required className="h-12" />
                     </div>
-                  </div>
-
-                  {/* Optional Date & Time Picker */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div className="space-y-2">
-                      <Label>Preferred Date (Optional)</Label>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full h-12 justify-start text-left font-normal",
-                              !date && "text-muted-foreground"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {date ? format(date, "PPP") : <span>Pick a date</span>}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={date}
-                            onSelect={setDate}
-                            disabled={(d) => d < new Date() || d.getDay() === 0}
-                            initialFocus
-                            className="p-3 pointer-events-auto"
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Preferred Time (Optional)</Label>
-                      <Select value={timeSlot} onValueChange={setTimeSlot}>
-                        <SelectTrigger className="h-12">
-                          <SelectValue placeholder="Select a time slot" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {timeSlots.map((slot) => (
-                            <SelectItem key={slot.value} value={slot.value}>
-                              {slot.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  <div className="mb-8 space-y-2">
-                    <Label htmlFor="details">Project Details</Label>
-                    <Textarea id="details" name="details" placeholder="Please describe your roofing needs, any damage you've noticed, or questions you have..." className="min-h-[120px] resize-none" />
                   </div>
 
                   <Button type="submit" variant="cta" size="xl" className="w-full" disabled={isSubmitting}>
@@ -285,9 +163,19 @@ const Estimate = () => {
                   </Button>
 
                   <p className="text-center text-sm text-muted-foreground mt-4">
-                    By submitting, you agree to receive communications from Duckbill Roofing. 
+                    By submitting, you agree to receive communications from Duckbill Roofing.
                     We respect your privacy and will never share your information.
                   </p>
+
+                  <div className="mt-6 pt-6 border-t border-border text-center">
+                    <Link
+                      to="/book"
+                      className="inline-flex items-center gap-2 text-accent hover:text-accent/80 font-medium transition-colors"
+                    >
+                      <CalendarDays className="h-4 w-4" />
+                      Prefer to book a specific time? Schedule online
+                    </Link>
+                  </div>
                 </form>}
             </motion.div>
 
@@ -312,9 +200,9 @@ const Estimate = () => {
                     <Phone className="h-5 w-5 text-accent" />
                     <span>(587) 432-3639</span>
                   </a>
-                  <a href="mailto:info@duckbillroofing.com" className="flex items-center gap-3 hover:text-accent transition-colors">
+                  <a href="mailto:info@duckbillroofing.ca" className="flex items-center gap-3 hover:text-accent transition-colors">
                     <Mail className="h-5 w-5 text-accent" />
-                    <span>info@duckbillroofing.com</span>
+                    <span>info@duckbillroofing.ca</span>
                   </a>
                   <div className="flex items-start gap-3">
                     <MapPin className="h-5 w-5 text-accent mt-0.5" />
