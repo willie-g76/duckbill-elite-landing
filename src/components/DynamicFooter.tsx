@@ -30,9 +30,10 @@ const DynamicFooter = () => {
     ? `${detectedCommunity}, Calgary, AB`
     : "Calgary, AB";
 
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  const mapSrc = `${supabaseUrl}/functions/v1/get-map?community=${encodeURIComponent(mapCommunity)}&apikey=${anonKey}`;
+  const mapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  const mapSrc = mapsApiKey
+    ? `https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(mapCommunity)}&zoom=13&size=400x200&scale=2&maptype=roadmap&markers=color:red%7C${encodeURIComponent(mapCommunity)}&key=${mapsApiKey}`
+    : "";
 
   const quickLinks = [
     { name: "About Us", href: "/about" },
@@ -126,14 +127,16 @@ const DynamicFooter = () => {
             <h4 className="font-heading text-lg font-bold mb-4">
               {detectedCommunity ? `Serving ${detectedCommunity}` : "Serving Calgary"}
             </h4>
-            <div className="rounded-lg overflow-hidden border border-primary-foreground/20">
-              <img
-                src={mapSrc}
-                alt={`Map of ${mapCommunity}`}
-                className="w-full h-48 object-cover"
-                loading="lazy"
-              />
-            </div>
+            {mapSrc && (
+              <div className="rounded-lg overflow-hidden border border-primary-foreground/20">
+                <img
+                  src={mapSrc}
+                  alt={`Map of ${mapCommunity}`}
+                  className="w-full h-48 object-cover"
+                  loading="lazy"
+                />
+              </div>
+            )}
             <p className="text-xs text-primary-foreground/50 mt-2">
               {detectedCommunity
                 ? `Duckbill Roofing proudly serves ${detectedCommunity} and surrounding areas.`
