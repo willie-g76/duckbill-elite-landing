@@ -1,5 +1,4 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -22,8 +21,7 @@ interface LeadPayload {
   community?: string;
 }
 
-function buildEmailHtml(lead: LeadPayload, leadId: string, supabaseUrl: string): string {
-  const phone = lead.phone.replace(/[^\d]/g, "").replace(/^1/, "");
+function buildEmailHtml(lead: LeadPayload): string {
   const sourceLabel = lead.source === "qr-landing"
     ? `QR Code Landing Page${lead.community ? ` (${lead.community})` : ""}`
     : "Estimate Page";
@@ -93,84 +91,11 @@ function buildEmailHtml(lead: LeadPayload, leadId: string, supabaseUrl: string):
         ${tableRows}
       </table>
 
-      <table style="width:100%;margin-top:24px;border-collapse:separate;border-spacing:8px 0;">
-        <tr>
-          <td style="width:33%;text-align:center;">
-            <a href="${supabaseUrl}/functions/v1/lead-action?id=${leadId}&action=call" style="display:block;background:#f5a623;color:#1a1a2e;text-decoration:none;padding:14px 8px;border-radius:8px;font-weight:600;font-size:14px;">
-              &#9742; Call
-            </a>
-          </td>
-          <td style="width:33%;text-align:center;">
-            <a href="${supabaseUrl}/functions/v1/lead-action?id=${leadId}&action=text" style="display:block;background:#1a1a2e;color:#f5a623;text-decoration:none;padding:14px 8px;border-radius:8px;font-weight:600;font-size:14px;border:2px solid #f5a623;">
-              &#9993; Text
-            </a>
-          </td>
-          <td style="width:33%;text-align:center;">
-            <a href="${supabaseUrl}/functions/v1/lead-action?id=${leadId}&action=vcard" style="display:block;background:#22c55e;color:#ffffff;text-decoration:none;padding:14px 8px;border-radius:8px;font-weight:600;font-size:14px;">
-              &#43; Save Contact
-            </a>
-          </td>
-        </tr>
-      </table>
-      <p style="text-align:center;color:#94a3b8;font-size:12px;margin-top:8px;">
-        +1 ${lead.phone}
-      </p>
-    </div>
-
-    <!-- Qualification Card -->
-    <div style="background:#ffffff;margin-top:12px;padding:24px;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
-      <h2 style="margin:0 0 16px;color:#1a1a2e;font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid #f5a623;padding-bottom:8px;">
-        &#9997; Qualification Details
-      </h2>
-
-      <table style="width:100%;border-collapse:collapse;">
-        <tr>
-          <td style="padding:8px 0;color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;vertical-align:top;width:110px;">First Name</td>
-          <td style="padding:8px 0;color:#1a1a2e;font-size:15px;font-weight:500;">${lead.firstName || "—"}</td>
-        </tr>
-        <tr>
-          <td style="padding:8px 0;color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;vertical-align:top;width:110px;">Last Name</td>
-          <td style="padding:8px 0;color:#1a1a2e;font-size:15px;font-weight:500;">${lead.lastName || "—"}</td>
-        </tr>
-        <tr>
-          <td style="padding:8px 0;color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;vertical-align:top;">Address</td>
-          <td style="padding:8px 0;color:#1a1a2e;font-size:15px;font-weight:500;">${lead.address || "—"}</td>
-        </tr>
-        <tr>
-          <td style="padding:8px 0;color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;vertical-align:top;">Phone</td>
-          <td style="padding:8px 0;color:#1a1a2e;font-size:15px;font-weight:500;">${lead.phone || "—"}</td>
-        </tr>
-        <tr>
-          <td style="padding:8px 0;color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;vertical-align:top;">Email</td>
-          <td style="padding:8px 0;color:#1a1a2e;font-size:15px;font-weight:500;">${lead.email || "—"}</td>
-        </tr>
-        <tr><td colspan="2" style="padding:8px 0;border-bottom:1px solid #e2e8f0;"></td></tr>
-        <tr>
-          <td style="padding:8px 0;color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;vertical-align:top;">Project Type</td>
-          <td style="padding:8px 0;color:#dc2626;font-size:15px;font-weight:600;font-style:italic;">Needs input &#8594;</td>
-        </tr>
-        <tr>
-          <td style="padding:8px 0;color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;vertical-align:top;">Roof Type</td>
-          <td style="padding:8px 0;color:#dc2626;font-size:15px;font-weight:600;font-style:italic;">Needs input &#8594;</td>
-        </tr>
-        <tr>
-          <td style="padding:8px 0;color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;vertical-align:top;">Quote Date</td>
-          <td style="padding:8px 0;color:#dc2626;font-size:15px;font-weight:600;font-style:italic;">Needs input &#8594;</td>
-        </tr>
-      </table>
-
-      <table style="width:100%;margin-top:20px;border-collapse:collapse;">
-        <tr>
-          <td style="text-align:center;">
-            <a href="https://duckbillroofing.ca/qualify/${leadId}" style="display:block;background:#7c3aed;color:#ffffff;text-decoration:none;padding:16px;border-radius:10px;font-weight:700;font-size:16px;">
-              Complete Qualification &#8594;
-            </a>
-          </td>
-        </tr>
-      </table>
-      <p style="text-align:center;color:#94a3b8;font-size:11px;margin-top:8px;">
-        Opens a form to fill in missing details during the call
-      </p>
+      <div style="margin-top:24px;text-align:center;">
+        <a href="tel:${lead.phone.replace(/[^+\d]/g, "")}" style="display:inline-block;background:#f5a623;color:#1a1a2e;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600;font-size:15px;">
+          Call ${lead.firstName || "Customer"}
+        </a>
+      </div>
     </div>
 
     <!-- Footer -->
@@ -197,6 +122,11 @@ serve(async (req) => {
       });
     }
 
+    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    if (!resendApiKey) {
+      throw new Error("RESEND_API_KEY is not configured");
+    }
+
     const lead: LeadPayload = await req.json();
 
     // Basic validation
@@ -210,77 +140,34 @@ serve(async (req) => {
       );
     }
 
-    // ── 1. Save lead to database (never lose a submission) ──
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const leadId = crypto.randomUUID();
 
-    let emailSent = false;
+    // Build a plain-text subject line
+    const subjectParts = [`New Lead: ${lead.firstName} ${lead.lastName}`.trim()];
+    if (lead.community) subjectParts.push(`(${lead.community})`);
+    if (lead.serviceType) subjectParts.push(`- ${lead.serviceType}`);
 
-    const { data: dbLead, error: dbError } = await supabase
-      .from("leads")
-      .insert({
-        first_name: lead.firstName,
-        last_name: lead.lastName || null,
-        email: lead.email || null,
-        phone: lead.phone,
-        address: lead.address || null,
-        city: lead.city || null,
-        service_type: lead.serviceType || null,
-        urgency: lead.urgency || null,
-        preferred_date: lead.preferredDate || null,
-        preferred_time: lead.preferredTime || null,
-        details: lead.details || null,
-        source: lead.source,
-        community: lead.community || null,
-        email_sent: false,
-      })
-      .select("id")
-      .single();
+    // Send email via Resend
+    const emailRes = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${resendApiKey}`,
+      },
+      body: JSON.stringify({
+        from: "Duckbill Leads <leads@duckbillroofing.ca>",
+        to: ["info@duckbillroofing.ca"],
+        subject: subjectParts.join(" "),
+        html: buildEmailHtml(lead),
+      }),
+    });
 
-    if (dbError) {
-      console.error("[submit-lead] DB insert failed:", dbError);
-    }
-
-    const leadId = dbLead?.id || crypto.randomUUID();
-
-    // ── 2. Send email notification via Resend ──
-    const resendApiKey = Deno.env.get("RESEND_API_KEY");
-    if (resendApiKey) {
-      const subjectParts = [`New Lead: ${lead.firstName} ${lead.lastName}`.trim()];
-      if (lead.community) subjectParts.push(`(${lead.community})`);
-      if (lead.serviceType) subjectParts.push(`- ${lead.serviceType}`);
-
-      const emailRes = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${resendApiKey}`,
-        },
-        body: JSON.stringify({
-          from: "Duckbill Leads <leads@duckbillroofing.ca>",
-          to: ["info@duckbillroofing.ca"],
-          subject: subjectParts.join(" "),
-          html: buildEmailHtml(lead, leadId, supabaseUrl),
-        }),
-      });
-
-      if (!emailRes.ok) {
-        const errText = await emailRes.text();
-        console.error(`[submit-lead] Resend failed for lead ${leadId}: ${errText}`);
-      } else {
-        emailSent = true;
-      }
-
-      // Update email_sent status in DB
-      if (emailSent && dbLead?.id) {
-        await supabase
-          .from("leads")
-          .update({ email_sent: true })
-          .eq("id", dbLead.id);
-      }
-    } else {
-      console.error("[submit-lead] RESEND_API_KEY not configured — lead saved to DB only");
+    if (!emailRes.ok) {
+      const errText = await emailRes.text();
+      console.error("Resend API error:", errText);
+      // We still return success to the user -- the lead data was received.
+      // Log the error server-side so William can diagnose.
+      console.error(`[submit-lead] Resend failed for lead ${leadId}: ${errText}`);
     }
 
     return new Response(

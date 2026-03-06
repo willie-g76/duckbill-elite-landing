@@ -14,8 +14,6 @@ import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import QRLanding from "./pages/QRLanding";
-import QualifyLead from "./pages/QualifyLead";
-import BookOnline from "./pages/BookOnline";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,15 +30,13 @@ const App = () => (
           <Route path="/service-areas" element={<ServiceAreas />} />
           <Route path="/service-areas/:areaSlug" element={<ServiceAreaLanding />} />
           <Route path="/estimate" element={<Estimate />} />
-          <Route path="/book" element={<BookOnline />} />
-          <Route path="/booking" element={<Navigate to="/book" replace />} />
+          <Route path="/booking" element={<Navigate to="/estimate" replace />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/go/:slug" element={<QRLanding />} />
-          <Route path="/qualify/:id" element={<QualifyLead />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

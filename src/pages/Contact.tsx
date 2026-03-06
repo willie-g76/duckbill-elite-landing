@@ -13,7 +13,6 @@ const Contact = () => {
         <meta name="description" content="Get in touch with Duckbill Roofing. Call, text, WhatsApp, or email us for roofing services in Calgary and surrounding areas. 24/7 emergency response." />
         <link rel="canonical" href="https://duckbillroofing.ca/contact" />
       </Helmet>
-
       {/* Hero */}
       <section className="pt-32 pb-16 bg-secondary">
         <div className="container-max section-padding !py-0">
@@ -63,17 +62,15 @@ const Contact = () => {
                     <p className="text-sm text-muted-foreground">Call or text anytime</p>
                   </div>
                 </a>
-
-                <a href="mailto:info@duckbillroofing.ca" className="flex items-center gap-4 group">
+                <a href="mailto:info@duckbillroofing.com" className="flex items-center gap-4 group">
                   <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
                     <Mail className="h-5 w-5 text-accent" />
                   </div>
                   <div>
-                    <p className="font-semibold text-foreground group-hover:text-accent transition-colors">info@duckbillroofing.ca</p>
+                    <p className="font-semibold text-foreground group-hover:text-accent transition-colors">info@duckbillroofing.com</p>
                     <p className="text-sm text-muted-foreground">Email us anytime</p>
                   </div>
                 </a>
-
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
                     <MapPin className="h-5 w-5 text-accent" />
@@ -83,7 +80,6 @@ const Contact = () => {
                     <p className="text-sm text-muted-foreground">Serving Calgary & surrounding areas within 1 hour</p>
                   </div>
                 </div>
-
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
                     <Clock className="h-5 w-5 text-accent" />
@@ -102,23 +98,23 @@ const Contact = () => {
               </div>
             </motion.div>
 
-            {/* Google Map */}
+            {/* Map placeholder */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <div className="rounded-2xl overflow-hidden h-full min-h-[400px] shadow-soft">
-                <iframe
-                  title="Duckbill Roofing Location"
-                  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY&q=100+Rivercrest+Close+SE,+Calgary,+AB"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0, minHeight: "400px" }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
+              <div className="bg-secondary rounded-2xl p-8 h-full flex flex-col justify-center items-center text-center min-h-[400px]">
+                <MapPin className="h-16 w-16 text-accent mb-6" />
+                <h3 className="font-heading text-2xl font-bold text-foreground mb-3">
+                  Serving All of Calgary
+                </h3>
+                <p className="text-muted-foreground max-w-md mb-2">
+                  Calgary, Okotoks, Chestermere, Drumheller, Bearspaw, and all communities within 1 hour of Calgary.
+                </p>
+                <p className="text-sm text-muted-foreground/70 mt-4">
+                  Interactive Google Map coming soon
+                </p>
               </div>
             </motion.div>
           </div>

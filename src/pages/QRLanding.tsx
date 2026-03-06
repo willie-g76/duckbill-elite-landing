@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import { Check, Phone, MapPin, Shield, Hammer, CloudRain } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import AddressAutocomplete from "@/components/AddressAutocomplete";
 import logoFull from "@/assets/logo-full.png";
 
 type QuoteType = "in-person" | "virtual" | null;
@@ -325,10 +324,11 @@ const QRLanding = () => {
                   </div>
                   <div className="space-y-1.5">
                     <Label htmlFor="qr-address">Address</Label>
-                    <AddressAutocomplete
+                    <Input
                       id="qr-address"
                       name="address"
-                      placeholder="Start typing your address…"
+                      placeholder="123 Main St, Calgary"
+                      autoComplete="street-address"
                       required
                       className="h-12"
                     />
