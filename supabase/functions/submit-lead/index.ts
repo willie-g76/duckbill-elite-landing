@@ -1,9 +1,18 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import {
+  createContact,
+  createOpportunity,
+  communityTag,
+} from "../_shared/gohighlevel.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+// GHL Pipeline & Stage IDs for "Door Hanger Leads"
+const GHL_PIPELINE_ID = "LynLSspbVZ5Kyr4o6ctx";
+const GHL_STAGE_NEW_LEAD = "e708602f-903b-4cb4-ae34-f096fb6ea088";
 
 interface LeadPayload {
   firstName: string;
@@ -165,13 +174,53 @@ serve(async (req) => {
     if (!emailRes.ok) {
       const errText = await emailRes.text();
       console.error("Resend API error:", errText);
-      // We still return success to the user -- the lead data was received.
-      // Log the error server-side so William can diagnose.
       console.error(`[submit-lead] Resend failed for lead ${leadId}: ${errText}`);
     }
 
+    // ── Push lead into GoHighLevel ──
+    let ghlContactId: string | null = null;
+    try {
+      const tags = ["door hanger campaign"];
+      if (lead.community) {
+        tags.push(communityTag(lead.community));
+      }
+      if (lead.source === "qr-landing") {
+        tags.push("qr-scan");
+      }
+
+      const ghlContact = await createContact({
+        firstName: lead.firstName,
+        lastName: lead.lastName || undefined,
+        email: lead.email || undefined,
+        phone: lead.phone,
+        address1: lead.address || undefined,
+        city: lead.city || undefined,
+        state: "Alberta",
+        country: "CA",
+        source: lead.source === "qr-landing" ? "QR Code" : "Website",
+        tags,
+      });
+
+      ghlContactId = ghlContact.id;
+
+      // Create opportunity in the Door Hanger Leads pipeline
+      await createOpportunity({
+        pipelineId: GHL_PIPELINE_ID,
+        pipelineStageId: GHL_STAGE_NEW_LEAD,
+        contactId: ghlContact.id,
+        name: `${lead.firstName} ${lead.lastName || ""} — ${lead.community || "Website"}`.trim(),
+        status: "open",
+        source: lead.source === "qr-landing" ? "QR Code" : "Website",
+      });
+
+      console.log(`[submit-lead] GHL contact created: ${ghlContact.id}`);
+    } catch (ghlErr) {
+      // Log but don't fail the request — email notification still went out
+      console.error("[submit-lead] GHL integration error:", ghlErr);
+    }
+
     return new Response(
-      JSON.stringify({ success: true, id: leadId }),
+      JSON.stringify({ success: true, id: leadId, ghlContactId }),
       {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

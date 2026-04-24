@@ -3,6 +3,11 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { corsResponse, jsonResponse, errorResponse } from "../_shared/cors.ts";
 import { createCalendarEvent } from "../_shared/google-calendar.ts";
 import { generateICS } from "../_shared/ics-generator.ts";
+import { createContact, createOpportunity } from "../_shared/gohighlevel.ts";
+
+// GHL Pipeline & Stage IDs for "Door Hanger Leads"
+const GHL_PIPELINE_ID = "LynLSspbVZ5Kyr4o6ctx";
+const GHL_STAGE_ESTIMATE_BOOKED = "ecee6948-a596-4686-967e-7740221b8d56";
 
 interface BookingRequest {
   first_name: string;
@@ -94,6 +99,35 @@ serve(async (req) => {
       .single();
 
     if (bookingErr) throw bookingErr;
+
+    // ── Push into GoHighLevel ──
+    try {
+      const ghlContact = await createContact({
+        firstName: body.first_name,
+        lastName: body.last_name || undefined,
+        email: body.email || undefined,
+        phone: body.phone,
+        address1: body.address || undefined,
+        state: "Alberta",
+        country: "CA",
+        postalCode: body.postal_code || undefined,
+        source: "Online Booking",
+        tags: ["online-booking"],
+      });
+
+      await createOpportunity({
+        pipelineId: GHL_PIPELINE_ID,
+        pipelineStageId: GHL_STAGE_ESTIMATE_BOOKED,
+        contactId: ghlContact.id,
+        name: `${fullName} — Estimate Booked`,
+        status: "open",
+        source: "Online Booking",
+      });
+
+      console.log(`[scheduler-book] GHL contact created: ${ghlContact.id}`);
+    } catch (ghlErr) {
+      console.error("[scheduler-book] GHL integration error:", ghlErr);
+    }
 
     // Create Google Calendar event
     const slotStart = new Date(body.slot_start);
