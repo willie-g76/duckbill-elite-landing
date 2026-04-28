@@ -2,8 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
-import { useEffect, useLayoutEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import Services from "./pages/Services";
 import ServiceAreas from "./pages/ServiceAreas";
@@ -20,29 +19,6 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-function ScrollToTop() {
-  const { pathname, hash } = useLocation();
-  const navType = useNavigationType();
-
-  // useLayoutEffect fires BEFORE the browser paints — this is critical
-  // useEffect fires too late and the browser may have already scrolled
-  useLayoutEffect(() => {
-    if (hash) {
-      // Delay hash scroll so the target element has time to render
-      requestAnimationFrame(() => {
-        const el = document.getElementById(hash.replace("#", ""));
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
-        }
-      });
-    } else {
-      window.scrollTo(0, 0);
-    }
-  }, [pathname, hash]);
-
-  return null;
-}
-
 // Disable the browser's automatic scroll restoration so React controls it
 if ("scrollRestoration" in window.history) {
   window.history.scrollRestoration = "manual";
@@ -54,7 +30,6 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/services" element={<Services />} />
