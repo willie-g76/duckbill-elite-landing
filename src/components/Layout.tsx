@@ -1,4 +1,4 @@
-import { ReactNode, useRef, useEffect } from "react";
+import { ReactNode, useEffect, useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Header from "./Header";
 import DynamicFooter from "./DynamicFooter";
@@ -8,26 +8,34 @@ interface LayoutProps {
   children: ReactNode;
 }
 
+const scrollToTop = () => {
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  const root = document.getElementById("root");
+  if (root) root.scrollTop = 0;
+};
+
 const Layout = ({ children }: LayoutProps) => {
   const { pathname } = useLocation();
-  const mainRef = useRef<HTMLDivElement>(null);
 
+  // useLayoutEffect fires BEFORE browser paint
+  useLayoutEffect(() => {
+    scrollToTop();
+  }, [pathname]);
+
+  // useEffect fires AFTER browser paint — backup scroll
   useEffect(() => {
-    // Scroll the page to the very top when the route changes
-    window.scrollTo(0, 0);
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-
-    // Also scroll the main container just in case
-    if (mainRef.current) {
-      mainRef.current.scrollTop = 0;
-    }
+    scrollToTop();
+    // One more scroll after a brief delay to catch any late layout shifts
+    const timer = setTimeout(scrollToTop, 100);
+    return () => clearTimeout(timer);
   }, [pathname]);
 
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
-      <main ref={mainRef} className="flex-1 pt-20">{children}</main>
+      <main className="flex-1 pt-20">{children}</main>
       <DynamicFooter />
       <FloatingCallButton />
     </div>
