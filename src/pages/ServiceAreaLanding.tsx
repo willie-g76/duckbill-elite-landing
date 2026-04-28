@@ -140,8 +140,11 @@ const ServiceAreaLanding = () => {
               {area.description}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
+              <a href="https://calendly.com/duckbillroofing/30min" target="_blank" rel="noopener noreferrer">
+                <Button variant="cta" size="lg">BOOK ONLINE</Button>
+              </a>
               <Link to="/estimate">
-                <Button variant="cta" size="lg">GET ESTIMATE</Button>
+                <Button variant="outline" size="lg" className="border-primary-foreground/30 text-primary-foreground bg-transparent hover:bg-primary-foreground/10">GET ESTIMATE</Button>
               </Link>
               <a href="tel:+15874323639">
                 <Button variant="outline" size="lg" className="border-primary-foreground/30 text-primary-foreground bg-transparent hover:bg-primary-foreground/10">
@@ -231,12 +234,19 @@ const ServiceAreaLanding = () => {
             <p className="text-accent-foreground/90 text-lg max-w-2xl mx-auto mb-8">
               Contact us today for a free, no-obligation estimate on your roofing project.
             </p>
-            <Link to="/estimate">
-              <Button size="xl" className="bg-primary text-primary-foreground hover:bg-primary/90 group">
-                GET ESTIMATE
-                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="https://calendly.com/duckbillroofing/30min" target="_blank" rel="noopener noreferrer">
+                <Button size="xl" className="bg-primary text-primary-foreground hover:bg-primary/90 group">
+                  BOOK ONLINE
+                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </a>
+              <Link to="/estimate">
+                <Button size="xl" variant="outline" className="border-accent-foreground/30 text-accent-foreground hover:bg-accent-foreground/10">
+                  GET ESTIMATE
+                </Button>
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>

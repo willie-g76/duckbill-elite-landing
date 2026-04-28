@@ -27,7 +27,7 @@ const services = [
       "5-year workmanship warranty",
     ],
     benefits: [
-      "Materials rated for Alberta's extreme temperature swings",
+      "Materials rated for Alberta's extreme climate",
       "Hail-resistant options available",
       "Energy-efficient underlayment",
       "Manufacturer warranties up to 30 years+",
@@ -90,7 +90,7 @@ const services = [
     image: heroImage,
     features: [
       "Comprehensive visual inspection",
-      "AI imaging analysis",
+      "Thermal imaging analysis",
       "Moisture detection testing",
       "Detailed photo documentation",
       "Written condition report",

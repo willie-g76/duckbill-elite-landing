@@ -1,18 +1,22 @@
+import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
-import { useScheduler } from "@/hooks/use-scheduler";
-import BookingSteps from "@/components/scheduler/BookingSteps";
-import ContactForm from "@/components/scheduler/ContactForm";
-import SlotPicker from "@/components/scheduler/SlotPicker";
-import BookingConfirmStep from "@/components/scheduler/BookingConfirmStep";
-import BookingSuccess from "@/components/scheduler/BookingSuccess";
 import { Phone, Clock, MapPin } from "lucide-react";
 
-const BookOnline = () => {
-  const scheduler = useScheduler();
+const CALENDLY_URL = "https://calendly.com/duckbillroofing/30min";
 
-  // Member name is internal only — not shown to homeowner
+const BookOnline = () => {
+  useEffect(() => {
+    // Load Calendly widget script
+    const script = document.createElement("script");
+    script.src = "https://assets.calendly.com/assets/external/widget.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   return (
     <Layout>
@@ -51,54 +55,19 @@ const BookOnline = () => {
       <section className="section-padding">
         <div className="container-max">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Main Content */}
+            {/* Calendly Embed */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="lg:col-span-2"
             >
-              <div ref={scheduler.stepRef} className="bg-card rounded-2xl p-6 md:p-8 shadow-soft">
-                <BookingSteps current={scheduler.step} />
-
-                {scheduler.step === 1 && (
-                  <ContactForm
-                    onSubmit={scheduler.submitContact}
-                    defaultValues={scheduler.contact}
-                  />
-                )}
-
-                {scheduler.step === 2 && (
-                  <SlotPicker
-                    slots={scheduler.slots}
-                    loading={scheduler.slotsLoading}
-                    timezone={scheduler.slotsTimezone}
-                    viewMonth={scheduler.viewMonth}
-                    onViewMonthChange={scheduler.setViewMonth}
-                    onSelect={scheduler.selectSlot}
-                    onBack={scheduler.goBack}
-                  />
-                )}
-
-                {scheduler.step === 3 && scheduler.contact && scheduler.selectedSlot && (
-                  <BookingConfirmStep
-                    contact={scheduler.contact}
-                    slot={scheduler.selectedSlot}
-                    timezone={scheduler.slotsTimezone}
-                    loading={scheduler.bookingLoading}
-                    error={scheduler.bookingError}
-                    onConfirm={scheduler.confirmBooking}
-                    onBack={scheduler.goBack}
-                  />
-                )}
-
-                {scheduler.step === 4 && scheduler.bookingResult && (
-                  <BookingSuccess
-                    result={scheduler.bookingResult}
-                    address={scheduler.contact?.address}
-                    timezone={scheduler.slotsTimezone}
-                  />
-                )}
+              <div className="bg-card rounded-2xl shadow-soft overflow-hidden">
+                <div
+                  className="calendly-inline-widget"
+                  data-url={CALENDLY_URL}
+                  style={{ minWidth: "320px", height: "700px" }}
+                />
               </div>
             </motion.div>
 
@@ -120,9 +89,9 @@ const BookOnline = () => {
                       1
                     </div>
                     <div>
-                      <h4 className="font-semibold text-foreground">Enter Your Info</h4>
+                      <h4 className="font-semibold text-foreground">Pick a Time</h4>
                       <p className="text-sm text-muted-foreground">
-                        Name, phone, and address so we know where to go
+                        Choose a date and time that works for you
                       </p>
                     </div>
                   </div>
@@ -131,9 +100,9 @@ const BookOnline = () => {
                       2
                     </div>
                     <div>
-                      <h4 className="font-semibold text-foreground">Pick a Time</h4>
+                      <h4 className="font-semibold text-foreground">Enter Your Info</h4>
                       <p className="text-sm text-muted-foreground">
-                        Choose from real-time available slots
+                        Name, phone, and address so we know where to go
                       </p>
                     </div>
                   </div>

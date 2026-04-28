@@ -12,7 +12,7 @@ const About = () => {
     <Layout>
       <Helmet>
         <title>About Duckbill Roofing | Calgary's Red Seal Certified Roofers</title>
-        <meta name="description" content="30+ years combined experience protecting Calgary homes. Red Seal certified, BBB A rated, with a 5-year workmanship warranty on every project." />
+        <meta name="description" content="10+ years experience protecting Calgary homes. Red Seal certified, BBB A rated, with a 5-year workmanship warranty on every project." />
         <link rel="canonical" href="https://duckbillroofing.ca/about" />
       </Helmet>
       {/* Hero */}
@@ -31,7 +31,7 @@ const About = () => {
               Calgary's Trusted Roofing Experts
             </h1>
             <p className="text-muted-foreground text-lg leading-relaxed">
-              With a combined 30 years of experience, our team has been
+              With 10 plus years of experience, our team has been
               protecting Calgary homes from Alberta's harshest weather.
             </p>
           </motion.div>
@@ -53,9 +53,9 @@ const About = () => {
               </h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  Duckbill Roofing & Waterproofing was founded with a simple mission: provide Calgary 
-                  homeowners with honest, high-quality roofing services they can trust. We saw too many 
-                  homeowners getting subpar work from fly-by-night contractors, especially after hailstorms.
+                  Duckbill Roofing & Waterproofing was founded with a simple mission: provide Calgary
+                  homeowners with honest, high-quality roofing services they can trust. We're passionate
+                  about delivering exceptional craftsmanship and standing behind every job we do.
                 </p>
                 <p>
                   Our team is led by a Red Seal certified craftsman — Canada's highest recognition for

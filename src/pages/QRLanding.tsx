@@ -8,9 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
-import { Check, Phone, MapPin, Shield, Hammer, CloudRain } from "lucide-react";
+import { Check, Phone, MapPin, Shield, Hammer, CloudRain, CalendarDays } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import logoFull from "@/assets/logo-full.png";
+
+const CALENDLY_URL = "https://calendly.com/duckbillroofing/30min";
 
 type QuoteType = "in-person" | "virtual" | null;
 
@@ -239,10 +241,12 @@ const QRLanding = () => {
                   variant="cta"
                   size="xl"
                   className="w-full text-base"
-                  onClick={() => handleQuoteSelect("in-person")}
+                  asChild
                 >
-                  <Shield className="h-5 w-5 mr-2" />
-                  Schedule an In-Person Quote
+                  <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">
+                    <CalendarDays className="h-5 w-5 mr-2" />
+                    Schedule an In-Person Quote
+                  </a>
                 </Button>
                 <Button
                   variant="ctaOutline"
