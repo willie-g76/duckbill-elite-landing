@@ -21,10 +21,20 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash, key } = useLocation();
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    if (hash) {
+      // If there's a hash, scroll to that element after a short delay
+      setTimeout(() => {
+        const el = document.getElementById(hash.replace("#", ""));
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash, key]);
   return null;
 }
 

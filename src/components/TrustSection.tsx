@@ -16,7 +16,7 @@ const TrustSection = () => {
     },
     {
       icon: Users,
-      title: "Combined 30 Years Experience",
+      title: "10+ Years Experience",
       description: "Seasoned experts protecting Calgary homes",
     },
     {

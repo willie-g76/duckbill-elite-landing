@@ -85,7 +85,7 @@ const About = () => {
                 {[
                   { icon: Shield, label: "BBB A Rating", desc: "Accredited business" },
                   { icon: Award, label: "5-Year Warranty", desc: "Workmanship guarantee" },
-                  { icon: Users, label: "30 Years Combined", desc: "Industry experience" },
+                  { icon: Users, label: "10+ Years", desc: "Industry experience" },
                   { icon: Clock, label: "24/7 Emergency", desc: "Always available" },
                 ].map((item) => (
                   <div key={item.label} className="flex items-center gap-4">
