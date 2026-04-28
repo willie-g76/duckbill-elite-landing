@@ -21,10 +21,9 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 function ScrollToTop() {
-  const { pathname, hash, key } = useLocation();
+  const { pathname, hash } = useLocation();
   useEffect(() => {
     if (hash) {
-      // If there's a hash, scroll to that element after a short delay
       setTimeout(() => {
         const el = document.getElementById(hash.replace("#", ""));
         if (el) {
@@ -32,9 +31,12 @@ function ScrollToTop() {
         }
       }, 100);
     } else {
-      window.scrollTo(0, 0);
+      // Force scroll to top using multiple methods for reliability
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
     }
-  }, [pathname, hash, key]);
+  }, [pathname, hash]);
   return null;
 }
 
