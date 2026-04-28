@@ -49,7 +49,7 @@ const DynamicFooter = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div>
-            <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: "instant" })} className="flex items-center gap-3 mb-6">
+            <Link to="/" className="flex items-center gap-3 mb-6">
               <img
                 src={logoFull}
                 alt="Duckbill Roofing"
@@ -91,7 +91,6 @@ const DynamicFooter = () => {
                 <li key={link.name}>
                   <Link
                     to={link.href}
-                    onClick={() => window.scrollTo({ top: 0, behavior: "instant" })}
                     className="text-sm text-primary-foreground/80 hover:text-accent transition-colors"
                   >
                     {link.name}
@@ -109,7 +108,6 @@ const DynamicFooter = () => {
                 <li key={c.slug}>
                   <Link
                     to={`/service-areas/${c.slug}`}
-                    onClick={() => window.scrollTo({ top: 0, behavior: "instant" })}
                     className={`text-sm transition-colors ${
                       detectedCommunity === c.name
                         ? "text-accent font-semibold"
@@ -151,10 +149,10 @@ const DynamicFooter = () => {
               © {currentYear} Duckbill Roofing & Waterproofing. All rights reserved.
             </p>
             <div className="flex gap-6">
-              <Link to="/privacy" onClick={() => window.scrollTo({ top: 0, behavior: "instant" })} className="text-sm text-primary-foreground/60 hover:text-accent transition-colors">
+              <Link to="/privacy" className="text-sm text-primary-foreground/60 hover:text-accent transition-colors">
                 Privacy Policy
               </Link>
-              <Link to="/terms" onClick={() => window.scrollTo({ top: 0, behavior: "instant" })} className="text-sm text-primary-foreground/60 hover:text-accent transition-colors">
+              <Link to="/terms" className="text-sm text-primary-foreground/60 hover:text-accent transition-colors">
                 Terms of Service
               </Link>
             </div>
