@@ -140,9 +140,9 @@ const ServiceAreaLanding = () => {
               {area.description}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <a href="https://calendly.com/duckbillroofing/30min" target="_blank" rel="noopener noreferrer">
+              <Link to="/book">
                 <Button variant="cta" size="lg">BOOK ONLINE</Button>
-              </a>
+              </Link>
               <Link to="/estimate">
                 <Button variant="outline" size="lg" className="border-primary-foreground/30 text-primary-foreground bg-transparent hover:bg-primary-foreground/10">GET ESTIMATE</Button>
               </Link>
@@ -235,12 +235,12 @@ const ServiceAreaLanding = () => {
               Contact us today for a free, no-obligation estimate on your roofing project.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="https://calendly.com/duckbillroofing/30min" target="_blank" rel="noopener noreferrer">
+              <Link to="/book">
                 <Button size="xl" className="bg-primary text-primary-foreground hover:bg-primary/90 group">
                   BOOK ONLINE
                   <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
-              </a>
+              </Link>
               <Link to="/estimate">
                 <Button size="xl" variant="outline" className="border-accent-foreground/30 text-accent-foreground hover:bg-accent-foreground/10">
                   GET ESTIMATE

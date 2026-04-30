@@ -12,8 +12,6 @@ import { Check, Phone, MapPin, Shield, Hammer, CloudRain, CalendarDays } from "l
 import { useToast } from "@/hooks/use-toast";
 import logoFull from "@/assets/logo-full.png";
 
-const CALENDLY_URL = "https://calendly.com/duckbillroofing/30min";
-
 type QuoteType = "in-person" | "virtual" | null;
 
 const timeSlots = [
@@ -243,10 +241,10 @@ const QRLanding = () => {
                   className="w-full text-base"
                   asChild
                 >
-                  <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">
+                  <Link to="/book">
                     <CalendarDays className="h-5 w-5 mr-2" />
                     Schedule an In-Person Quote
-                  </a>
+                  </Link>
                 </Button>
                 <Button
                   variant="ctaOutline"
