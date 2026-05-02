@@ -261,7 +261,7 @@ const ServiceAreaLanding = () => {
             name: `Duckbill Roofing & Waterproofing - ${area.name}`,
             url: `https://duckbillroofing.ca/service-areas/${area.slug}`,
             telephone: "+15874323639",
-            email: "info@duckbillroofing.com",
+            email: "info@duckbillroofing.ca",
             image: "https://duckbillroofing.ca/og-image.png",
             priceRange: "$$",
             areaServed: { "@type": "City", name: area.name },

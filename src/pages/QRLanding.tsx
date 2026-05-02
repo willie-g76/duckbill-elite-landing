@@ -71,13 +71,12 @@ const QRLanding = () => {
     setIsSubmitting(true);
 
     try {
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      const email = (formData.get("email") as string) || "";
 
       const body = {
         firstName,
         lastName,
-        email: (formData.get("email") as string) || "",
+        email,
         phone: (formData.get("phone") as string) || "",
         address: (formData.get("address") as string) || "",
         city: neighbourhood.name,
@@ -86,16 +85,19 @@ const QRLanding = () => {
         preferredTime: timeSlot
           ? timeSlots.find((t) => t.value === timeSlot)?.label
           : undefined,
-        source: "qr-landing" as const,
+        source: "qr-landing",
         community: neighbourhood.name,
+        _subject: `New QR Lead from ${neighbourhood.name} — ${firstName} ${lastName}`.trim(),
+        _replyto: email,
+        _template: "table",
+        _captcha: "false",
       };
 
-      const res = await fetch(`${supabaseUrl}/functions/v1/submit-lead`, {
+      const res = await fetch("https://formsubmit.co/ajax/info@duckbillroofing.ca", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${anonKey}`,
-          apikey: anonKey,
+          Accept: "application/json",
         },
         body: JSON.stringify(body),
       });

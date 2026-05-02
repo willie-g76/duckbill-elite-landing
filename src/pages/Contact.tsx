@@ -62,12 +62,12 @@ const Contact = () => {
                     <p className="text-sm text-muted-foreground">Call or text anytime</p>
                   </div>
                 </a>
-                <a href="mailto:info@duckbillroofing.com" className="flex items-center gap-4 group">
+                <a href="mailto:info@duckbillroofing.ca" className="flex items-center gap-4 group">
                   <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
                     <Mail className="h-5 w-5 text-accent" />
                   </div>
                   <div>
-                    <p className="font-semibold text-foreground group-hover:text-accent transition-colors">info@duckbillroofing.com</p>
+                    <p className="font-semibold text-foreground group-hover:text-accent transition-colors">info@duckbillroofing.ca</p>
                     <p className="text-sm text-muted-foreground">Email us anytime</p>
                   </div>
                 </a>

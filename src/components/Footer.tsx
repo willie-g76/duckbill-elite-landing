@@ -65,11 +65,11 @@ const Footer = () => {
                 WhatsApp
               </a>
               <a
-                href="mailto:info@duckbillroofing.com"
+                href="mailto:info@duckbillroofing.ca"
                 className="flex items-center gap-3 text-sm text-primary-foreground/80 hover:text-accent transition-colors"
               >
                 <Mail className="h-4 w-4 text-accent" />
-                info@duckbillroofing.com
+                info@duckbillroofing.ca
               </a>
               <div className="flex items-start gap-3 text-sm text-primary-foreground/80">
                 <MapPin className="h-4 w-4 text-accent mt-0.5" />

@@ -40,34 +40,38 @@ const Estimate = () => {
     setIsSubmitting(true);
 
     try {
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-
       const formData = new FormData(e.currentTarget);
 
+      const firstName = (formData.get("firstName") as string) || "";
+      const lastName = (formData.get("lastName") as string) || "";
+      const email = (formData.get("email") as string) || "";
+
       const body = {
-        firstName: formData.get("firstName") as string || "",
-        lastName: formData.get("lastName") as string || "",
-        email: formData.get("email") as string || "",
-        phone: formData.get("phone") as string || "",
-        address: formData.get("address") as string || "",
-        city: formData.get("city") as string || "",
+        firstName,
+        lastName,
+        email,
+        phone: (formData.get("phone") as string) || "",
+        address: (formData.get("address") as string) || "",
+        city: (formData.get("city") as string) || "",
         serviceType,
         urgency: urgency || undefined,
         preferredDate: date ? format(date, "yyyy-MM-dd") : undefined,
         preferredTime: timeSlot
           ? timeSlots.find((t) => t.value === timeSlot)?.label
           : undefined,
-        details: formData.get("details") as string || undefined,
-        source: "estimate" as const,
+        details: (formData.get("details") as string) || undefined,
+        source: "estimate",
+        _subject: `New Estimate Request — ${firstName} ${lastName}`.trim(),
+        _replyto: email,
+        _template: "table",
+        _captcha: "false",
       };
 
-      const res = await fetch(`${supabaseUrl}/functions/v1/submit-lead`, {
+      const res = await fetch("https://formsubmit.co/ajax/info@duckbillroofing.ca", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${anonKey}`,
-          apikey: anonKey,
+          Accept: "application/json",
         },
         body: JSON.stringify(body),
       });
@@ -312,9 +316,9 @@ const Estimate = () => {
                     <Phone className="h-5 w-5 text-accent" />
                     <span>(587) 432-3639</span>
                   </a>
-                  <a href="mailto:info@duckbillroofing.com" className="flex items-center gap-3 hover:text-accent transition-colors">
+                  <a href="mailto:info@duckbillroofing.ca" className="flex items-center gap-3 hover:text-accent transition-colors">
                     <Mail className="h-5 w-5 text-accent" />
-                    <span>info@duckbillroofing.com</span>
+                    <span>info@duckbillroofing.ca</span>
                   </a>
                   <div className="flex items-start gap-3">
                     <MapPin className="h-5 w-5 text-accent mt-0.5" />

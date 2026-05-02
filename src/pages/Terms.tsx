@@ -31,7 +31,7 @@ const Terms = () => {
           <h2 className="font-heading text-foreground">Limitation of Liability</h2>
           <p>Duckbill Roofing & Waterproofing is not liable for any indirect or consequential damages arising from the use of our website or services.</p>
           <h2 className="font-heading text-foreground">Contact</h2>
-          <p>Questions about these terms? Contact us at info@duckbillroofing.com or (587) 432-3639.</p>
+          <p>Questions about these terms? Contact us at info@duckbillroofing.ca or (587) 432-3639.</p>
         </div>
       </section>
     </Layout>

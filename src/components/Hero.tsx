@@ -1,29 +1,16 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Shield, CloudLightning, Wind, CloudRain, CloudSnow, Thermometer, Search, Sparkles } from "lucide-react";
+import { CloudLightning, Search } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import heroImage from "@/assets/hero-roofing.jpg";
 import redSealBadge from "@/assets/red-seal-badge.png";
-import { supabase } from "@/integrations/supabase/client";
-import hailHistory, { getHailHistory, defaultHailInfo, type HailEvent } from "@/data/hailHistory";
-
-interface WeatherData {
-  temp: number;
-  feels_like: number;
-  description: string;
-  icon: string;
-  wind_speed: number;
-  rain: number;
-  snow: number;
-}
+import hailHistory, { getHailHistory, defaultHailInfo } from "@/data/hailHistory";
 
 const Hero = () => {
-  const [weather, setWeather] = useState<WeatherData | null>(null);
-  const [showWeather, setShowWeather] = useState(false);
   const [showHail, setShowHail] = useState(false);
   const [hailSearch, setHailSearch] = useState("");
   const location = useLocation();
@@ -53,21 +40,6 @@ const Hero = () => {
 
   const communitySlug = getCommunitySlug();
   const hailData = communitySlug ? getHailHistory(communitySlug) : defaultHailInfo;
-
-  useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        const { data, error } = await supabase.functions.invoke("get-weather");
-        if (error) throw error;
-        setWeather(data);
-      } catch (e) {
-        console.error("Failed to fetch weather:", e);
-      }
-    };
-    fetchWeather();
-    const interval = setInterval(fetchWeather, 15 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <section className="relative min-h-screen flex items-center -mt-20 pt-20">
@@ -162,64 +134,6 @@ const Hero = () => {
           />
         </div>
       </motion.div>
-
-      {/* Weather Dialog */}
-      <Dialog open={showWeather} onOpenChange={setShowWeather}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="font-heading flex items-center gap-2">
-              <Thermometer className="h-5 w-5 text-accent" />
-              Calgary Live Weather
-            </DialogTitle>
-            <DialogDescription>Current conditions in Calgary, AB</DialogDescription>
-          </DialogHeader>
-          {weather ? (
-            <div className="space-y-4 pt-2">
-              <div className="flex items-center gap-4">
-                <img
-                  src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
-                  alt={weather.description}
-                  className="h-16 w-16"
-                />
-                <div>
-                  <p className="text-3xl font-bold font-heading">{weather.temp}°C</p>
-                  <p className="text-muted-foreground capitalize">{weather.description}</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-muted rounded-lg p-3">
-                  <p className="text-xs text-muted-foreground">Feels Like</p>
-                  <p className="font-semibold">{weather.feels_like}°C</p>
-                </div>
-                <div className="bg-muted rounded-lg p-3">
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <Wind className="h-3 w-3" /> Wind
-                  </div>
-                  <p className="font-semibold">{weather.wind_speed} km/h</p>
-                </div>
-                {weather.rain > 0 && (
-                  <div className="bg-muted rounded-lg p-3">
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <CloudRain className="h-3 w-3" /> Rain
-                    </div>
-                    <p className="font-semibold">{weather.rain} mm</p>
-                  </div>
-                )}
-                {weather.snow > 0 && (
-                  <div className="bg-muted rounded-lg p-3">
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <CloudSnow className="h-3 w-3" /> Snow
-                    </div>
-                    <p className="font-semibold">{weather.snow} mm</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          ) : (
-            <p className="text-muted-foreground py-4">Loading weather data...</p>
-          )}
-        </DialogContent>
-      </Dialog>
 
       {/* Hail History Dialog */}
       <Dialog open={showHail} onOpenChange={setShowHail}>

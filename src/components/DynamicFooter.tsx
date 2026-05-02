@@ -28,9 +28,7 @@ const DynamicFooter = () => {
     ? `${detectedCommunity}, Calgary, AB`
     : "Calgary, AB";
 
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  const mapSrc = `${supabaseUrl}/functions/v1/get-map?community=${encodeURIComponent(mapCommunity)}&apikey=${anonKey}`;
+  const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(mapCommunity)}&output=embed`;
 
   const quickLinks = [
     { name: "About Us", href: "/about" },
@@ -67,11 +65,11 @@ const DynamicFooter = () => {
                 (587) 432-3639
               </a>
               <a
-                href="mailto:info@duckbillroofing.com"
+                href="mailto:info@duckbillroofing.ca"
                 className="flex items-center gap-3 text-sm text-primary-foreground/80 hover:text-accent transition-colors"
               >
                 <Mail className="h-4 w-4 text-accent" />
-                info@duckbillroofing.com
+                info@duckbillroofing.ca
               </a>
               <div className="flex items-start gap-3 text-sm text-primary-foreground/80">
                 <MapPin className="h-4 w-4 text-accent mt-0.5" />
@@ -125,11 +123,12 @@ const DynamicFooter = () => {
               {detectedCommunity ? `Serving ${detectedCommunity}` : "Serving Calgary"}
             </h4>
             <div className="rounded-lg overflow-hidden border border-primary-foreground/20">
-              <img
+              <iframe
                 src={mapSrc}
-                alt={`Map of ${mapCommunity}`}
-                className="w-full h-48 object-cover"
+                title={`Map of ${mapCommunity}`}
+                className="w-full h-48 border-0"
                 loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
             <p className="text-xs text-primary-foreground/50 mt-2">

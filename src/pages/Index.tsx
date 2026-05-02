@@ -26,7 +26,7 @@ const Index = () => {
             logo: "https://duckbillroofing.ca/logo-full.png",
             image: "https://duckbillroofing.ca/og-image.png",
             telephone: "+15874323639",
-            email: "info@duckbillroofing.com",
+            email: "info@duckbillroofing.ca",
             description:
               "Expert roofing and waterproofing in Calgary, Alberta. BBB A rated, Red Seal certified with 5-year workmanship warranty.",
             priceRange: "$$",
